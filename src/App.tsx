@@ -1,4 +1,4 @@
-import React, { useState } from 'react'; // this is React Hook
+import React, { useEffect, useState } from 'react'; // this is React Hook
 import logo from './logo.svg';
 
 const App = () => { // Function Components
@@ -14,6 +14,12 @@ const App = () => { // Function Components
     setProduct(prevProduct => [...prevProduct, {name: `TV` + (prevProduct.length + 1), display: (prevProduct.length * 10) + 10}]); // ...product: lấy tất cả các giá trị đã có trước đó
     // ! khi muốn tính toán thì phải đóng ngoặc hẳn hoi (prevProduct + 1)
   }
+
+  useEffect(() => {
+    fetch('https://localhost:44386/api/Products')
+      .then(response => response.json())
+      .then(data => setProduct(data))
+  }, []); // [] không giới hạn time
 
   return (
     <div className='app'>
