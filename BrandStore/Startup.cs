@@ -1,4 +1,4 @@
-using BrandStore.Data;
+﻿using BrandStore.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -25,7 +25,7 @@ namespace BrandStore
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
+        // This method gets called by the runtime(thực thi). Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
 
@@ -38,8 +38,9 @@ namespace BrandStore
             // Generate, Config DbContext
             services.AddDbContext<StoreContext>(options =>
             {
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")); // đoạn này là kết nối với SqlServer nhé
             });
+            services.AddCors(); // Thêm Cors, để cho phép UI lấy dữ liệu từ backend
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -55,6 +56,11 @@ namespace BrandStore
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors(opt =>
+            {
+                opt.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3003");
+            });
 
             app.UseAuthorization();
 

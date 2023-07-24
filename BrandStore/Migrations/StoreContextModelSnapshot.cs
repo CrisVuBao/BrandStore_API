@@ -40,8 +40,8 @@ namespace BrandStore.Migrations
                     b.Property<long>("Price")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("QuantityInStock")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("QuantityInStock")
+                        .HasColumnType("int");
 
                     b.Property<string>("Type")
                         .HasColumnType("nvarchar(max)");

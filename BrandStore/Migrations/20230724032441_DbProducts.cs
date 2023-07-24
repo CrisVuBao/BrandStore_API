@@ -2,7 +2,7 @@
 
 namespace BrandStore.Migrations
 {
-    public partial class DbProduct : Migration
+    public partial class DbProducts : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -18,7 +18,7 @@ namespace BrandStore.Migrations
                     PictureUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Type = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Brand = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    QuantityInStock = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    QuantityInStock = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {

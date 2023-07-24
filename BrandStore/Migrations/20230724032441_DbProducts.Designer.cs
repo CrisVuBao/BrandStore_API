@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BrandStore.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    [Migration("20230723145132_DbProduct")]
-    partial class DbProduct
+    [Migration("20230724032441_DbProducts")]
+    partial class DbProducts
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -42,8 +42,8 @@ namespace BrandStore.Migrations
                     b.Property<long>("Price")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("QuantityInStock")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("QuantityInStock")
+                        .HasColumnType("int");
 
                     b.Property<string>("Type")
                         .HasColumnType("nvarchar(max)");
