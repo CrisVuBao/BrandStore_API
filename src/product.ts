@@ -4,7 +4,7 @@ export interface Product {
     description: string;
     price: number;
     pictureUrl: string;
-    type: string;
+    type?: string; // có thể null kiểu dáng
     brand: string;
-    quantityInStock: number;
+    quantityInStock?: number; // có thể null số lượng
 }
