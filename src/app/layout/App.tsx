@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'; // this is React Hook
 import logo from './logo.svg';
-import {Product} from './product';
+import {Product} from '../models/product';
+import Catalog from '../../features/catalog/Catalog';
 
 const App = () => { // Function Components
   const [products, setProduct] = useState<Product[]>([]);
@@ -29,12 +30,7 @@ const App = () => { // Function Components
   return (
     <div className='app'>
       <h1>Brand-Store</h1>
-      <ul>
-        {products.map((itemProduct) => ( // itemProduct là tham số để tham chiếu đến products, để lấy các thuộc tính, dữ liệu trong products
-          <li key={itemProduct.id}>{itemProduct.name} - {itemProduct.price} - {itemProduct.pictureUrl}</li> // dấu "-" là của code html
-        ))}
-      </ul>
-      <button onClick={addProduct}>Click add product</button>
+      <Catalog products={products} addProduct={addProduct}/> {/*products=, addProduct= là attribute */}
     </div>
   );
 }
