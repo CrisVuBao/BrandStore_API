@@ -1,7 +1,17 @@
-import { AppBar, Container, FormControlLabel, FormGroup, Switch, Toolbar, Typography, styled } from "@mui/material";
-import { TIMEOUT } from "dns";
-import { Link } from "react-router-dom";
-import Catalog from "../../features/catalog/Catalog";
+import { ShoppingCart } from "@mui/icons-material";
+import { AppBar, Badge, Container, FormControlLabel, FormGroup, IconButton, List, ListItem, Switch, Toolbar, Typography, colors, styled } from "@mui/material";
+import {NavLink } from "react-router-dom";
+
+const midLinks = [
+  {title: 'catalog', path: '/catalog'},
+  {title: 'about', path: '/about'},
+  {title: 'contact', path: '/contact'}
+]
+
+const rightLinks = [
+  {title: 'login', path: '/login'},
+  {title: 'register', path: 'register'}
+]
 
 interface Props {
     darkMode: boolean;
@@ -60,7 +70,13 @@ const Header = ({darkMode, handleThemeChange} : Props) => {
     return (
         <AppBar position="static" sx={{mb: 3}}> {/*phần header*/}
             <Toolbar>
-                <Typography variant="h6">BrandStore</Typography>
+                <Typography 
+                  variant="h6" 
+                  component={NavLink} to='/'
+                  sx={{color: 'inherit', textDecoration: 'none'}} 
+                >
+                  BrandStore
+                </Typography>
                 <FormGroup>
                     <FormControlLabel
                         // checked={darkMode} giá trị mặc định của darkMode là false(light), còn khi onChange={handleThemChange} là true(dark)
@@ -68,6 +84,39 @@ const Header = ({darkMode, handleThemeChange} : Props) => {
                         label="MUI switch"
                     />
                 </FormGroup>
+                <List sx={{display: 'flex'}}>
+                  {midLinks.map(({title, path}) => { // phải cho title, path vào trong ngoặc nhọn vì là thuộc tính của object
+                    return (
+                      <ListItem
+                        component={NavLink} // lấy link tương đương của path với bên Router.tsx = với midLink[]
+                        to={path}
+                        key={path}
+                        sx={{color: 'inherit', typography: 'h6'}}
+                      >
+                        {title.toUpperCase()}
+                      </ListItem>
+                    )})}
+                </List>
+
+                <IconButton size="large" edge="start" color="inherit" sx={{mr: 2}}>
+                      <Badge badgeContent='5' color="secondary">
+                          <ShoppingCart />
+                      </Badge>
+                </IconButton>
+
+                <List sx={{display: 'flex'}}>
+                    {rightLinks.map(({title, path}) => { 
+                      return (
+                        <ListItem
+                          component={NavLink}
+                          to={path}
+                          key={path}
+                          sx={{color: 'inherit', typography: 'h6'}}
+                        >
+                          {title.toUpperCase()}                          
+                        </ListItem>
+                      )})}
+                </List>
             </Toolbar>
         </AppBar>
         
