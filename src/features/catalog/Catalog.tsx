@@ -1,17 +1,19 @@
-import { Avatar, Button, List, ListItem, ListItemAvatar, ListItemText } from "@mui/material";
 import { Product } from "../../app/models/product";
 import ProductList from "./ProductList";
+import { useEffect, useState } from "react";
 
-interface Props {
-    products: Product[];
-    addProduct: () => void;
-}
+const Catalog = () => {
+    const [products, setProduct] = useState<Product[]>([]);
+  
+    useEffect(() => {
+      fetch('https://localhost:44386/api/Products')
+        .then(response => response.json())
+        .then(data => setProduct(data)) //! đoạn này là lấy data từ response,json() để trả ra cho "products" trong useState()
+    }, []); // [] không giới hạn time
 
-const Catalog = ({products,addProduct}: Props) => {
     return ( // this is place generate UI 
         <>
             <ProductList products={products} /> {/* đây cũng giống như hàm khởi tạo được gọi bên hàm Main trong C# */}
-            <Button variant="contained" onClick={addProduct}>Click add product</Button>
         </>
 
     )

@@ -1,43 +1,35 @@
 import React, { useEffect, useState } from 'react'; // this is React Hook
-import logo from './logo.svg';
-import {Product} from '../models/product';
 import Header from './Header';
 import Catalog from '../../features/catalog/Catalog';
-import { Container, CssBaseline, List, Typography } from '@mui/material';
+import { Container, CssBaseline, ThemeProvider, createTheme } from '@mui/material';
+import { Palette } from '@mui/icons-material';
 
 const App = () => { // Function Components
-  const [products, setProduct] = useState<Product[]>([]);
-  const [count, setCount] = useState(0);
+  const [darkMode, setDarkMode] = useState(false);
+  const paletteType = darkMode ? "dark" : "light";
+  const theme = createTheme({ // this is CreateTheme MUI
+     palette: {
+      mode: paletteType, // mode: dùng để điều chỉnh đế độ dark hay là light
+      background: {
+        default: paletteType === "light" ? "#FFF0F5" : "#121212"
+      }
+     }
+  });
 
-  const addProduct = () => {
-    // prevProduct là tham số đầu vào, tham chiếu đến hàm product để lấy các thuộc tính trong product
-    setProduct(prevProduct => [...prevProduct, 
-    {
-      // phần này là thêm các thuộc tính từ product.ts, để thêm mới product
-      id: prevProduct.length + 101,
-      name: `TV` + (prevProduct.length + 1), 
-      price: (prevProduct.length * 100) + 100,
-      brand: "brand",
-      description: "description",
-      pictureUrl: 'http://picsum.photos/200'
-    }]);
-  }
-
-  useEffect(() => {
-    fetch('https://localhost:44386/api/Products')
-      .then(response => response.json())
-      .then(data => setProduct(data)) //! đoạn này là lấy data từ response,json() để trả ra cho "products" trong useState()
-  }, []); // [] không giới hạn time
+const handleThemeChange = () => {
+  setDarkMode(!darkMode) // darkMode = true (dark)
+}
 
   // phần xử lý UI
   return (
     <div className='app'> {/* dấu <> </> là parents dùng để nhúng html bên trong */}
+      <ThemeProvider theme={theme}>
         <CssBaseline/> {/*cho phần Header sát đầu web, cho ko còn khoảng trống trên đầu */}
-        <Header/>
+        <Header darkMode={darkMode} handleThemeChange={handleThemeChange}/> {/* đây gọi là handleThemeChange của compo Header = với handle.. của App.tsx */}
         <Container>
-          <Catalog products={products} addProduct={addProduct}/> {/*products=, addProduct= là attribute */}
+          <Catalog/> {/*products=, addProduct= là attribute */}
         </Container>
-        
+      </ThemeProvider> 
     </div> 
   );
 }

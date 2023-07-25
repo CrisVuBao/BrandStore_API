@@ -10,7 +10,7 @@ const ProductCard = ({itemProduct} : Props) => {
         <Card>
             <CardHeader 
                 avatar={
-                    <Avatar sx={{bgcolor: 'secondary.main'}}>
+                    <Avatar sx={{bgcolor: 'primary.main'}}>
                         {itemProduct.name.charAt(0).toUpperCase()} {/*CharAt(0): lấy kí tự thứ index 0, toUpperCase: viết hoa */}
                     </Avatar>
                 }
@@ -26,7 +26,7 @@ const ProductCard = ({itemProduct} : Props) => {
             />
             <CardContent>
                 <Typography gutterBottom color="secondary" variant="h5">
-                    ${(itemProduct.price / 100).toFixed(2)}
+                    {(itemProduct.price / 100).toFixed(3)} VNĐ
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
                     {itemProduct.brand} / {itemProduct.type}
