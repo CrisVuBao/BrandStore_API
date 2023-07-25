@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react'; // this is React Hook
 import logo from './logo.svg';
 import {Product} from '../models/product';
 import Catalog from '../../features/catalog/Catalog';
+import { List, Typography } from '@mui/material';
 
 const App = () => { // Function Components
   const [products, setProduct] = useState<Product[]>([]);
+  const [count, setCount] = useState(0);
 
   const addProduct = () => {
     // prevProduct là tham số đầu vào, tham chiếu đến hàm product để lấy các thuộc tính trong product
@@ -28,10 +30,10 @@ const App = () => { // Function Components
 
   // phần xử lý UI
   return (
-    <div className='app'>
-      <h1>Brand-Store</h1>
-      <Catalog products={products} addProduct={addProduct}/> {/*products=, addProduct= là attribute */}
-    </div>
+    <div className='app'> {/* dấu <> </> là parents dùng để nhúng html bên trong */}
+        <Typography variant='h1'>Brand-Store</Typography>
+        <Catalog products={products} addProduct={addProduct}/> {/*products=, addProduct= là attribute */}
+    </div> 
   );
 }
 

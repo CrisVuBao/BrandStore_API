@@ -3,3 +3,12 @@
   font-weight: bold;
   color: blue;
 }
+
+.view-count {
+  margin: 5px;
+  display: flex;
+}
+
+.view-count .count {
+  margin: 5px;
+}
