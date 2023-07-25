@@ -1,4 +1,7 @@
 import { AppBar, Container, FormControlLabel, FormGroup, Switch, Toolbar, Typography, styled } from "@mui/material";
+import { TIMEOUT } from "dns";
+import { Link } from "react-router-dom";
+import Catalog from "../../features/catalog/Catalog";
 
 interface Props {
     darkMode: boolean;
@@ -55,17 +58,16 @@ const Header = ({darkMode, handleThemeChange} : Props) => {
       }));
 
     return (
-        <AppBar position="fixed" sx={{mb: 3}}> {/*phần header*/}
+        <AppBar position="static" sx={{mb: 3}}> {/*phần header*/}
             <Toolbar>
                 <Typography variant="h6">BrandStore</Typography>
                 <FormGroup>
                     <FormControlLabel
                         // checked={darkMode} giá trị mặc định của darkMode là false(light), còn khi onChange={handleThemChange} là true(dark)
-                        control={<MaterialUISwitch sx={{ m: 1 , transitionDelay: 1}} defaultChecked checked={darkMode} onChange={handleThemeChange}/>}
+                        control={<MaterialUISwitch sx={{ m: 1}} defaultChecked checked={darkMode} onChange={handleThemeChange}/>}
                         label="MUI switch"
                     />
                 </FormGroup>
-
             </Toolbar>
         </AppBar>
         

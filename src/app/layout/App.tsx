@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react'; // this is React Hook
 import Header from './Header';
-import Catalog from '../../features/catalog/Catalog';
 import { Container, CssBaseline, ThemeProvider, createTheme } from '@mui/material';
-import { Palette } from '@mui/icons-material';
+import { Outlet } from 'react-router-dom';
 
 const App = () => { // Function Components
   const [darkMode, setDarkMode] = useState(false);
@@ -27,7 +26,7 @@ const handleThemeChange = () => {
         <CssBaseline/> {/*cho phần Header sát đầu web, cho ko còn khoảng trống trên đầu */}
         <Header darkMode={darkMode} handleThemeChange={handleThemeChange}/> {/* đây gọi là handleThemeChange của compo Header = với handle.. của App.tsx */}
         <Container>
-          <Catalog/> {/*products=, addProduct= là attribute */}
+          <Outlet />
         </Container>
       </ThemeProvider> 
     </div> 
