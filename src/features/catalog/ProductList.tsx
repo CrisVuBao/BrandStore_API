@@ -10,7 +10,7 @@ const ProductList = ({products} : Props) => {
     return (
         <Grid container spacing={4}>
             {products.map((itemProduct) => ( // itemProduct là tham số để tham chiếu đến products, để lấy các thuộc tính, dữ liệu trong products
-                <Grid item xs={4} key={itemProduct.id}> {/* mỗi product chiếm 4 colunm,  */}
+                <Grid item xs={3} key={itemProduct.id}> {/* mỗi product chiếm 4 colunm,  */}
                     <ProductCard  itemProduct={itemProduct}/>
                 </Grid>
             ))}

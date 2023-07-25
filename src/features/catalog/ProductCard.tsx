@@ -1,4 +1,4 @@
-import {Button, Card, CardActions, CardContent, CardMedia, Typography } from "@mui/material";
+import {Avatar, Button, Card, CardActions, CardContent, CardHeader, CardMedia, Typography } from "@mui/material";
 import { Product } from "../../app/models/product";
 
 interface Props {
@@ -8,24 +8,35 @@ interface Props {
 const ProductCard = ({itemProduct} : Props) => {
     return (
         <Card>
-        <CardMedia
-          sx={{ height: 140 }}
-          image={itemProduct.pictureUrl}
-          title="green iguana"
-        />
-        <CardContent>
-          <Typography gutterBottom variant="h5" component="div">
-            Item
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Blanditiis deleniti similique laborum vel quidem iste nisi nesciunt perferendis doloribus hic necessitatibus alias officia maiores, voluptas quisquam dolorum rem quaerat dignissimos.
-          </Typography>
-        </CardContent>
-        <CardActions>
-          <Button size="small">{itemProduct.price} $</Button>
-          <Button size="small">Learn More</Button>
-        </CardActions>
-      </Card>
+            <CardHeader 
+                avatar={
+                    <Avatar sx={{bgcolor: 'secondary.main'}}>
+                        {itemProduct.name.charAt(0).toUpperCase()} {/*CharAt(0): lấy kí tự thứ index 0, toUpperCase: viết hoa */}
+                    </Avatar>
+                }
+                title={itemProduct.name}
+                titleTypographyProps={{
+                    sx: {fontWeight: 'bold', color: 'primary.main'}
+                }}
+            />
+            <CardMedia
+                sx={{ height: 140, backgroundSize: 'contain', bgcolor: 'primary.light'}}
+                image={itemProduct.pictureUrl}
+                title="green iguana"
+            />
+            <CardContent>
+                <Typography gutterBottom color="secondary" variant="h5">
+                    ${(itemProduct.price / 100).toFixed(2)}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                    {itemProduct.brand} / {itemProduct.type}
+                </Typography>
+            </CardContent>
+            <CardActions>
+                <Button size="small">ADD TO CART</Button>
+                <Button size="small">VIEW</Button>
+            </CardActions>
+        </Card>
     )
 }
 
