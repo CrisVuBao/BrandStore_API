@@ -1,4 +1,4 @@
-import { List, ListItem, ListItemAvatar, Avatar, ListItemText } from "@mui/material";
+import { List, ListItem, ListItemAvatar, Avatar, ListItemText, Grid } from "@mui/material";
 import { Product } from "../../app/models/product";
 import ProductCard from "./ProductCard";
 
@@ -8,11 +8,13 @@ interface Props {
 
 const ProductList = ({products} : Props) => {
     return (
-        <List>
+        <Grid container spacing={4}>
             {products.map((itemProduct) => ( // itemProduct là tham số để tham chiếu đến products, để lấy các thuộc tính, dữ liệu trong products
-                <ProductCard key={itemProduct.id} itemProduct={itemProduct}/>
+                <Grid item xs={4} key={itemProduct.id}> {/* mỗi product chiếm 4 colunm,  */}
+                    <ProductCard  itemProduct={itemProduct}/>
+                </Grid>
             ))}
-        </List>
+        </Grid>
     )
 }
 

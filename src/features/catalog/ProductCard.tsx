@@ -1,4 +1,4 @@
-import { ListItem, ListItemAvatar, Avatar, ListItemText } from "@mui/material";
+import {Button, Card, CardActions, CardContent, CardMedia, Typography } from "@mui/material";
 import { Product } from "../../app/models/product";
 
 interface Props {
@@ -7,14 +7,25 @@ interface Props {
 
 const ProductCard = ({itemProduct} : Props) => {
     return (
-        <ListItem key={itemProduct.id}>
-            <ListItemAvatar>
-                <Avatar src={itemProduct.pictureUrl} />
-            </ListItemAvatar>
-            <ListItemText>
-                {itemProduct.name} - {itemProduct.price}
-            </ListItemText>
-        </ListItem> // dấu "-" là của code html
+        <Card>
+        <CardMedia
+          sx={{ height: 140 }}
+          image={itemProduct.pictureUrl}
+          title="green iguana"
+        />
+        <CardContent>
+          <Typography gutterBottom variant="h5" component="div">
+            Item
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Blanditiis deleniti similique laborum vel quidem iste nisi nesciunt perferendis doloribus hic necessitatibus alias officia maiores, voluptas quisquam dolorum rem quaerat dignissimos.
+          </Typography>
+        </CardContent>
+        <CardActions>
+          <Button size="small">{itemProduct.price} $</Button>
+          <Button size="small">Learn More</Button>
+        </CardActions>
+      </Card>
     )
 }
 
