@@ -7,7 +7,7 @@ interface Props {
 
 const ProductCard = ({itemProduct} : Props) => {
     return (
-        <Card>
+        <Card sx={{borderRadius: 2.5}}>
             <CardHeader 
                 avatar={
                     <Avatar sx={{bgcolor: 'primary.main'}}>
