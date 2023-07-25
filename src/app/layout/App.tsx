@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'; // this is React Hook
 import logo from './logo.svg';
 import {Product} from '../models/product';
+import Header from './Header';
 import Catalog from '../../features/catalog/Catalog';
-import { List, Typography } from '@mui/material';
+import { Container, CssBaseline, List, Typography } from '@mui/material';
 
 const App = () => { // Function Components
   const [products, setProduct] = useState<Product[]>([]);
@@ -31,8 +32,12 @@ const App = () => { // Function Components
   // phần xử lý UI
   return (
     <div className='app'> {/* dấu <> </> là parents dùng để nhúng html bên trong */}
-        <Typography variant='h1'>Brand-Store</Typography>
-        <Catalog products={products} addProduct={addProduct}/> {/*products=, addProduct= là attribute */}
+        <CssBaseline/> {/*cho phần Header sát đầu web, cho ko còn khoảng trống trên đầu */}
+        <Header/>
+        <Container>
+          <Catalog products={products} addProduct={addProduct}/> {/*products=, addProduct= là attribute */}
+        </Container>
+        
     </div> 
   );
 }
