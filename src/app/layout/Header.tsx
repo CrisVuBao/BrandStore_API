@@ -73,7 +73,14 @@ const Header = ({darkMode, handleThemeChange} : Props) => {
                 <Typography 
                   variant="h6" 
                   component={NavLink} to='/'
-                  sx={{color: 'inherit', textDecoration: 'none'}} 
+                  sx={{
+                    color: 'inherit',
+                    fontWeight: 'bold', 
+                    textDecoration: 'none',
+                    '&:hover' : {
+                        color: '#2a3eb1'
+                    }
+                  }} 
                 >
                   BrandStore
                 </Typography>
@@ -91,7 +98,16 @@ const Header = ({darkMode, handleThemeChange} : Props) => {
                         component={NavLink} // lấy link tương đương của path với bên Router.tsx = với midLink[]
                         to={path}
                         key={path}
-                        sx={{color: 'inherit', typography: 'h6'}}
+                        sx={{
+                          color: 'inherit', 
+                          typography: 'h6',
+                          '&:hover' : {
+                              color: '#2a3eb1'
+                          },
+                          '&.active' : { // giữ nguyên màu chữ khi bấm vào link nào đó
+                            color: 'text.secondary'
+                          }
+                        }}
                       >
                         {title.toUpperCase()}
                       </ListItem>
@@ -111,7 +127,16 @@ const Header = ({darkMode, handleThemeChange} : Props) => {
                           component={NavLink}
                           to={path}
                           key={path}
-                          sx={{color: 'inherit', typography: 'h6'}}
+                          sx={{
+                            color: 'inherit', 
+                            typography: 'h6',
+                            '&:hover' : {
+                              color: '#2a3eb1'
+                            },
+                            '&.active' : { // giữ nguyên màu chữ khi bấm vào link nào đó
+                              color: 'text.secondary'
+                            }
+                          }}
                         >
                           {title.toUpperCase()}                          
                         </ListItem>
