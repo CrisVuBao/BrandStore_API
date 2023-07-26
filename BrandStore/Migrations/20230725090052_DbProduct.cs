@@ -2,7 +2,7 @@
 
 namespace BrandStore.Migrations
 {
-    public partial class DbProducts : Migration
+    public partial class DbProduct : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

@@ -1,4 +1,5 @@
 ﻿using BrandStore.Data;
+using BrandStore.Middleware;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -43,9 +44,12 @@ namespace BrandStore
             services.AddCors(); // Thêm Cors, để cho phép UI lấy dữ liệu từ backend
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        // Configure the HTTP request pipeline
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+
+            app.UseMiddleware<ExceptionMiddleware>();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -59,7 +63,7 @@ namespace BrandStore
 
             app.UseCors(opt =>
             {
-                opt.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3003");
+                opt.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000");
             });
 
             app.UseAuthorization();

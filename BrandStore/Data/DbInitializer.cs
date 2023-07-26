@@ -208,6 +208,17 @@ namespace BrandStore.Data
                     Type = "Boots",
                     QuantityInStock = 100
                 },
+                new Product
+                {
+                    Name = "Booties Heeled Boot",
+                    Description =
+                        "Suspendisse dui purus, scelerisque at, vulputate vitae, pretium mattis, nunc. Mauris eget neque at sem venenatis eleifend. Ut nonummy.",
+                    Price = 20000000,
+                    PictureUrl = "/images/products/WomenBoot.webp",
+                    Brand = "Angular",
+                    Type = "Boots",
+                    QuantityInStock = 100
+                }
             };
 
             foreach (var product in products)

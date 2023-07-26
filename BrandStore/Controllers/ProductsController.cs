@@ -9,8 +9,8 @@ using System.Threading.Tasks;
 
 namespace BrandStore.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class ProductsController : ControllerBase
     {
         private readonly StoreContext _context;

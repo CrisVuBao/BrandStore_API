@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BrandStore.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    [Migration("20230724032441_DbProducts")]
-    partial class DbProducts
+    [Migration("20230725090052_DbProduct")]
+    partial class DbProduct
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
