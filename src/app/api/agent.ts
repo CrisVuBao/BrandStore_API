@@ -16,17 +16,17 @@ const requests = {
 const Catalog = {
     // đây là cách truyền thống
     list: () => {
-        return requests.get('products');
+        return requests.get('Products');
     },
     // đây là cách nhanh gọn theo kiểu lambda
-    details: (id: number) => requests.get(`products/${id}`)
+    details: (id: number) => requests.get(`Products/${id}`)
 }
 
 const TestErrors = { // đây là đối tượng(object)
-    get400Error: () => requests.get('byggy/not-found'),
-    get401Error: () => requests.get('byggy/unauthorised'),
-    get404Error: () => requests.get('byggy/not-found'),
-    get500Error: () => requests.get('byggy/server-error'),
+    get400Error: () => requests.get('Buggy/not-found'),
+    get401Error: () => requests.get('Buggy/unauthorised'),
+    get404Error: () => requests.get('Buggy/not-found'),
+    get500Error: () => requests.get('Buggy/server-error'),
     getValidationError: () => requests.get('byggy/validation-error')
 }
 
