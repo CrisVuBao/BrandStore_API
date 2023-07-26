@@ -17,7 +17,7 @@ const App = () => { // Function Components
 
 const handleThemeChange = () => {
   setDarkMode(!darkMode) // darkMode = true (dark)
-}
+};
 
   // phần xử lý UI
   return (
