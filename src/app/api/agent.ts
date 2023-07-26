@@ -1,7 +1,10 @@
-import axios, { Axios, AxiosError, AxiosResponse } from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import { router } from "../router/Routes";
+import { resolve } from "path";
+
+const sleep = () => new Promise(resolve => setTimeout(resolve, 1000));
 
 axios.defaults.baseURL = 'https://localhost:44386/api/';
 
@@ -9,6 +12,7 @@ const responseBody = (response: AxiosResponse) => response.data
 
 // đây là đoạn code xử lý yêu cầu, phản hồi từ máy chủ bằng Interceptor
  axios.interceptors.response.use(async Response => {
+    await sleep();
     return Response
  }, (error: AxiosError) => {
     const {data, status} = error.response as AxiosResponse;
