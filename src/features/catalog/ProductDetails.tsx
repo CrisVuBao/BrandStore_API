@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Product } from "../../app/models/product";
 import agent from "../../app/api/agent";
+import NotFound from "../../app/errors/NotFound";
 
 const ProductDetails = () => {
     const { id } = useParams<{ id: string}>(); // usePrams thì truyền tham số vào phải là kiểu string, ko truyền kiểu number vào được (vì gốc của nó là kiểu string)
@@ -17,7 +18,7 @@ const ProductDetails = () => {
     }, [id]);
 
     if (loading) return <h5>..loading</h5>;
-    if (!itemProduct) return <h3>not product</h3>;
+    if (!itemProduct) return <NotFound />; // nếu id sản phẩm ko có, thì sẽ chuyển qua NotFound
 
     return (
         <Grid container spacing={6}>
