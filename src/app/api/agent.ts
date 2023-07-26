@@ -1,10 +1,19 @@
-import axios, { AxiosResponse } from "axios";
+import axios, { Axios, AxiosError, AxiosResponse } from "axios";
+import { error } from "console";
 
 axios.defaults.baseURL = 'https://localhost:44386/api/';
 
 const responseBody = (response: AxiosResponse) => {
     return response.data;
 }
+
+// đây là đoạn code xử lý yêu cầu, phản hồi từ máy chủ bằng Interceptor
+ axios.interceptors.response.use(Response => {
+    return Response
+ }, (error: AxiosError) => {
+    console.log('caught by interceptor');
+    return Promise.reject(error.message);
+ })
 
 const requests = {
     get: (url: string) => axios.get(url).then(responseBody), // Lambda Expression

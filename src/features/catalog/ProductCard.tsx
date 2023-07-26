@@ -12,7 +12,7 @@ const ProductCard = ({itemProduct} : Props) => {
             <CardHeader 
                 avatar={
                     <Avatar sx={{bgcolor: 'primary.main'}}>
-                        {itemProduct.name.charAt(0).toUpperCase()} {/*CharAt(0): lấy kí tự thứ index 0, toUpperCase: viết hoa */}
+                        {itemProduct.name.charAt(0).toUpperCase()} {/*CharAt(0): lấy kí tự thứ index 0, toUpperCase: viết hoa*/}
                     </Avatar>
                 }
                 title={itemProduct.name}
