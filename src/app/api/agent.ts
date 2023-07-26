@@ -1,12 +1,11 @@
 import axios, { Axios, AxiosError, AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import { router } from "../router/Routes";
 
 axios.defaults.baseURL = 'https://localhost:44386/api/';
 
-const responseBody = (response: AxiosResponse) => {
-    return response.data;
-}
+const responseBody = (response: AxiosResponse) => response.data
 
 // đây là đoạn code xử lý yêu cầu, phản hồi từ máy chủ bằng Interceptor
  axios.interceptors.response.use(async Response => {
@@ -15,13 +14,14 @@ const responseBody = (response: AxiosResponse) => {
     const {data, status} = error.response as AxiosResponse;
     switch (status) {
         case 400:
+            router.navigate('/server-error', {state: {error: data}}) // /server-error là khi bấm vào button có status là 400, thì sẽ chuyển đến Route server-error
             toast.error(data.title);
             break;
         case 401:
             toast.error(data.title);
             break;
         case 500:
-            toast.error(data.title);
+            router.navigate('/server-error', {state: {error: data}});
             break;    
         default:
             break;
@@ -47,11 +47,11 @@ const Catalog = {
 }
 
 const TestErrors = { // đây là đối tượng(object)
-    get400Error: () => requests.get('Buggy/not-found'),
-    get401Error: () => requests.get('Buggy/unauthorised'),
+    get400Error: () => requests.get('Buggy/bad-request'),
+    get401Error: () => requests.get('Buggy/unauthoried'),
     get404Error: () => requests.get('Buggy/not-found'),
     get500Error: () => requests.get('Buggy/server-error'),
-    getValidationError: () => requests.get('byggy/validation-error')
+    getValidationError: () => requests.get('Buggy/validation-error')
 }
 
 const agent = {
