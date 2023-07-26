@@ -1,5 +1,6 @@
 import axios, { Axios, AxiosError, AxiosResponse } from "axios";
-import { error } from "console";
+import { toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 axios.defaults.baseURL = 'https://localhost:44386/api/';
 
@@ -8,11 +9,25 @@ const responseBody = (response: AxiosResponse) => {
 }
 
 // đây là đoạn code xử lý yêu cầu, phản hồi từ máy chủ bằng Interceptor
- axios.interceptors.response.use(Response => {
+ axios.interceptors.response.use(async Response => {
     return Response
  }, (error: AxiosError) => {
-    console.log('caught by interceptor');
-    return Promise.reject(error.message);
+    const {data, status} = error.response as AxiosResponse;
+    switch (status) {
+        case 400:
+            toast.error(data.title);
+            break;
+        case 401:
+            toast.error(data.title);
+            break;
+        case 500:
+            toast.error(data.title);
+            break;    
+        default:
+            break;
+    }
+
+    return Promise.reject(error.response);
  })
 
 const requests = {

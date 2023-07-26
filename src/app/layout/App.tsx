@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'; // this is React Hook
 import Header from './Header';
 import { Container, CssBaseline, Paper, ThemeProvider, createTheme } from '@mui/material';
 import { Outlet } from 'react-router-dom';
+import {ToastContainer} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const App = () => { // Function Components
   const [darkMode, setDarkMode] = useState(false);
@@ -23,6 +25,7 @@ const handleThemeChange = () => {
   return (
     <div className='app'> {/* dấu <> </> là parents dùng để nhúng html bên trong */}
       <ThemeProvider theme={theme}>
+        <ToastContainer position='bottom-right' hideProgressBar theme='colored'/>
         <CssBaseline/> {/*cho phần Header sát đầu web, cho ko còn khoảng trống trên đầu */}
         <Header darkMode={darkMode} handleThemeChange={handleThemeChange}/> {/* đây gọi là handleThemeChange của compo Header = với handle.. của App.tsx */}
             <Container>
