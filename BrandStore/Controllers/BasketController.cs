@@ -22,7 +22,7 @@ namespace BrandStore.Controllers
             _context = context;
         }
 
-        [HttpGet]
+        [HttpGet(Name = "GetBasket")]
         public async Task<ActionResult<BasketDto>> GetBasket()
         {
             var basket = await RetrieveBasket();
@@ -30,26 +30,13 @@ namespace BrandStore.Controllers
             if (basket == null) return NotFound();
 
             // phần này là lấy data(cụ thể là lấy trong Entities) trong CSDL để truyền vào cho DTOs(Data Transfer Oject)
-            return new BasketDto
-            {
-                Id = basket.Id,
-                BuyerId = basket.BuyerId,
-                ItemsDto = basket.Items.Select(item => new BasketItemDto // item là ánh xạ của Items trong Entities
-                {
-                    ProductId = item.ProductId,
-                    Name = item.Product.Name,
-                    Price = item.Product.Price,
-                    PictureUrl = item.Product.PictureUrl,
-                    Type = item.Product.Type,
-                    Brand = item.Product.Brand,
-                    Quantity = item.Quantity
-
-                }).ToList(),
-            };
+            return MapBasketToDto(basket); // trả về data product trong basket
         }
 
+
+
         [HttpPost]
-        public async Task<ActionResult> AddItemBasket(int productId, int quantity)
+        public async Task<ActionResult<BasketDto>> AddItemBasket(int productId, int quantity)
         {
             // get basket
             var basket = await RetrieveBasket();
@@ -63,7 +50,7 @@ namespace BrandStore.Controllers
 
             var result = await _context.SaveChangesAsync() > 0; // kiểm tra xem giá trị nếu có  > 0, thì đã có sự thay đổi ở CSDl(là ok)
             // save changes
-            if (result) return Ok("Add Items OK");
+            if (result) return CreatedAtRoute("GetBasket", MapBasketToDto(basket)); // hiện thông tin product đã thêm vào giỏ hàng
             return BadRequest(new ProblemDetails { Title = "had problem add item in basket!!!"});
         }
 
@@ -98,6 +85,26 @@ namespace BrandStore.Controllers
             var basket = new Basket {BuyerId = buyerId}; // tạo mới 1 Basket , có BuyerId của class Basket =  với buyerId của Guid(id tạo ngẫu nhiên)
             _context.Baskets.Add(basket);
             return basket;
+        }
+
+        private BasketDto MapBasketToDto(Basket basket)
+        {
+            return new BasketDto
+            {
+                Id = basket.Id,
+                BuyerId = basket.BuyerId,
+                ItemsDto = basket.Items.Select(item => new BasketItemDto // item là ánh xạ của Items trong Entities
+                {
+                    ProductId = item.ProductId,
+                    Name = item.Product.Name,
+                    Price = item.Product.Price,
+                    PictureUrl = item.Product.PictureUrl,
+                    Type = item.Product.Type,
+                    Brand = item.Product.Brand,
+                    Quantity = item.Quantity
+
+                }).ToList(),
+            };
         }
     }
 }
