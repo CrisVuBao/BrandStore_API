@@ -1,4 +1,5 @@
 export interface Product {
+    // các thuộc tính phải trùng với thuộc tính bên c#, viết hoa chữ đầu cũng ko dc
     id: number;
     name: string;
     description: string;

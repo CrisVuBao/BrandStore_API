@@ -7,6 +7,7 @@ import AboutPage from "../../features/about/AboutPage";
 import ContactPage from "../../features/contact/ContactPage";
 import ServerError from "../errors/ServerError";
 import NotFound from "../errors/NotFound";
+import BasketPage from "../../features/basket/BasketPage";
 
 export const router = createBrowserRouter([ // đây là BrowserRouter
     {
@@ -21,6 +22,7 @@ export const router = createBrowserRouter([ // đây là BrowserRouter
             {path: 'contact', element: <ContactPage />},
             {path: 'server-error', element: <ServerError />},
             {path: 'not-found', element: <NotFound />},
+            {path: 'basket', element: <BasketPage />},
             {path: '*', element: <Navigate replace to='/not-found'/>} // nếu title nào chưa gắn link để chuyển đên Route, thì nó sẽ tự động chuyển đến Route NotFound
         ]
     }
