@@ -71,9 +71,14 @@ namespace BrandStore.Controllers
         public async Task<ActionResult> RemoveBasketItem(int productId, int quantity)
         {
             // get basket
+            var basket = await RetrieveBasket();
+            if (basket == null) return NotFound();
             // remove item or reduce quantity
+            basket.RemoveItem(productId, quantity);
             // save changes
-            return Ok();
+            var result = await _context.SaveChangesAsync() > 0;
+            if (result) return Ok();
+            return BadRequest(new ProblemDetails { Title = "Not Remove item!!!" }); // nếu ko xóa được thì trả ra title như này
         }
 
         // Đoạn code này được xây dựng để có thể các method get, post, put, delete dùng chung method này
