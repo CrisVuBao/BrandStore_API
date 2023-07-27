@@ -4,9 +4,11 @@ import 'react-toastify/dist/ReactToastify.css';
 import { router } from "../router/Routes";
 import { resolve } from "path";
 
-const sleep = () => new Promise(resolve => setTimeout(resolve, 1000));
+const sleep = () => new Promise(resolve => setTimeout(resolve, 500));
 
-axios.defaults.baseURL = 'https://localhost:44386/api/';
+axios.defaults.baseURL = 'http://localhost:5000/api/';
+// Khi bạn đặt axios.defaults.withCredentials = true;, bạn đang thông báo cho Axios rằng bạn muốn gửi các yêu cầu với thông tin xác thực đi kèm. Điều này là hữu ích trong trường hợp bạn đang làm việc với một ứng dụng web có tính chất đăng nhập và bạn muốn chia sẻ thông tin xác thực giữa các tên miền khác nhau.
+axios.defaults.withCredentials = true; // ủy nhiệm phần cookies cho React quản lý, khi bấm vào ADD TO CART thì buyerId sẽ tự sinh ra trong Cookies
 
 const responseBody = (response: AxiosResponse) => response.data
 
@@ -58,9 +60,16 @@ const TestErrors = { // đây là đối tượng(object)
     getValidationError: () => requests.get('Buggy/validation-error')
 }
 
+const Basket = {
+    get: () => requests.get('basket'),
+    addItem: (productId: number, quantity = 1) => requests.post(`basket?productId=${productId}&quantity=${quantity}`),
+    removeItem: (productId: number, quantity = 1) => requests.delete(`basket?productId=${productId}&quantity=${quantity}`)
+}
+
 const agent = {
     Catalog,
-    TestErrors
+    TestErrors,
+    Basket
 }
 
 export default agent;
