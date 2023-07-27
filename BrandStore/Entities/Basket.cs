@@ -18,8 +18,9 @@ namespace BrandStore.Entities
                 Items.Add(new BasketItem { ProductId = product.Id, Quantity = quantityAdd });
             }
 
+            // đoạn code này là nếu đã có product trong basket, thì bấm vào add sẽ cộng dồn số lượng(Quantity) vào giỏ
             var existingItem = Items.FirstOrDefault(item => item.ProductId == product.Id);
-            if (existingItem != null) existingItem.Quantity += quantityAdd; // nếu sản phẩm tồn tại trong giỏ hàng(existingItem != null), thì chương trình sẽ cộng thêm số lượng mới (quantity) vào số lượng hiện có của mục sản phẩm (Quantity = Quantity + quantity)
+            if (existingItem != null) existingItem.Quantity += quantityAdd; // nếu sản phẩm đã tồn tại trong giỏ hàng(existingItem != null), thì chương trình sẽ cộng thêm số lượng mới (quantity) vào số lượng hiện có của mục sản phẩm (Quantity = Quantity + quantity)
         }
 
         public void RemoveItem(int productId, int quantity)
