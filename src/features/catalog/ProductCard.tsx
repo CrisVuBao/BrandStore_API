@@ -9,7 +9,7 @@ interface Props {
     itemProduct : Product;
 }
 
-const ProductCard = ({itemProduct} : Props) => {
+export default function ProductCard({itemProduct} : Props) {
     const [loading, setLoading] = useState(false);
 
     const handleAddItem = (productId: number) => {
@@ -55,5 +55,3 @@ const ProductCard = ({itemProduct} : Props) => {
         </Card>
     )
 }
-
-export default ProductCard;

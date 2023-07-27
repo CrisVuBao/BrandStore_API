@@ -4,7 +4,7 @@ interface Props {
     message?: string;
 }
 
-const LoadingComponent = ({message = 'Loading...'} : Props) => {
+export default function LoadingComponent({message = 'Loading...'} : Props) {
     return (
         <Backdrop open={true} invisible={true}>
             <Box display='flex' justifyContent='center' alignItems='center' height='100vh'>
@@ -14,5 +14,3 @@ const LoadingComponent = ({message = 'Loading...'} : Props) => {
         </Backdrop>
     )
 }
-
-export default LoadingComponent;

@@ -4,7 +4,7 @@ import { Product } from "../../app/models/product";
 import ProductList from "./ProductList";
 import { useEffect, useState } from "react";
 
-const Catalog = () => {
+export default function Catalog() {
     const [products, setProduct] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -23,5 +23,3 @@ const Catalog = () => {
 
     )
 }
-
-export default Catalog;

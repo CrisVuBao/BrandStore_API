@@ -5,7 +5,7 @@ import { Outlet } from 'react-router-dom';
 import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const App = () => { // Function Components
+export default function App() { // Function Components
   const [darkMode, setDarkMode] = useState(false);
   const paletteType = darkMode ? "dark" : "light";
   const theme = createTheme({ // this is CreateTheme MUI
@@ -35,5 +35,3 @@ const handleThemeChange = () => {
     </div> 
   );
 }
-
-export default App;

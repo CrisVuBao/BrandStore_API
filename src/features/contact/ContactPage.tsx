@@ -1,7 +1,7 @@
 import { Typography } from "@mui/material";
 
 
-const ContactPage = () => {
+export default function ContactPage() {
 
     return (
         <Typography variant="h3">
@@ -9,5 +9,3 @@ const ContactPage = () => {
         </Typography>
     )
 }
-
-export default ContactPage;

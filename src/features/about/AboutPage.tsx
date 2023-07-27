@@ -1,7 +1,7 @@
 import { Button, ButtonGroup, Container, Typography } from "@mui/material";
 import agent from "../../app/api/agent";
 
-const AboutPage = () => {
+export default function AboutPage() {
     return (
         <Container>
             <Typography gutterBottom variant="h2">Error for testing purposes</Typography>
@@ -15,5 +15,3 @@ const AboutPage = () => {
         </Container>
     )
 }
-
-export default AboutPage;

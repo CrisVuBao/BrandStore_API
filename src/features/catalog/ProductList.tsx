@@ -6,7 +6,7 @@ interface Props {
     products: Product[]; // khai báo variable
 }
 
-const ProductList = ({products} : Props) => {
+export default function ProductList({products} : Props) {
     return (
         <Grid container spacing={4} sx={{mt: 0}}>
             {products.map((itemProduct) => ( // itemProduct là tham số để tham chiếu đến products, để lấy các thuộc tính, dữ liệu trong products
@@ -17,5 +17,3 @@ const ProductList = ({products} : Props) => {
         </Grid>
     )
 }
-
-export default ProductList;

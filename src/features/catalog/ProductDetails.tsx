@@ -6,7 +6,7 @@ import agent from "../../app/api/agent";
 import NotFound from "../../app/errors/NotFound";
 import LoadingComponent from "../../app/layout/LoadingComponent";
 
-const ProductDetails = () => {
+export default function ProductDetails() {
     const { id } = useParams<{ id: string}>(); // usePrams thì truyền tham số vào phải là kiểu string, ko truyền kiểu number vào được (vì gốc của nó là kiểu string)
     const [itemProduct, setProduct] = useState<Product | null>(null); // truyền model Product vào trong useState để quản lý sản phẩm
     const [loading, setLoading] = useState(true);
@@ -67,5 +67,3 @@ const ProductDetails = () => {
         </Grid>
     );
 };
-
-export default ProductDetails;

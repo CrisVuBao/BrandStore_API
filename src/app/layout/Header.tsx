@@ -29,7 +29,7 @@ interface Props {
     handleThemeChange: () => void;
 }
 
-const Header = ({darkMode, handleThemeChange} : Props) => {
+export default function Header({darkMode, handleThemeChange} : Props) {
     
     const MaterialUISwitch = styled(Switch)(({ theme }) => ({
         width: 62,
@@ -145,5 +145,3 @@ const Header = ({darkMode, handleThemeChange} : Props) => {
         
     )
 }
-
-export default Header;

@@ -6,7 +6,7 @@ import { Box, IconButton, Paper, Table, TableBody, TableCell, TableContainer, Ta
 import { Add, Delete, Remove } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
 
-const BasketPage = () => {
+export default function BasketPage() {
     const [loading, setLoading] = useState(true);
     const [basket, setBasket] = useState<Basket | null>(null);
 
@@ -57,5 +57,3 @@ const BasketPage = () => {
       </TableContainer>
     )
 }
-
-export default BasketPage;

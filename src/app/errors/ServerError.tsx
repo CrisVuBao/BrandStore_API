@@ -1,7 +1,7 @@
 import { Container, Divider, Paper, Typography } from "@mui/material";
 import { useLocation } from "react-router-dom";
 
-const ServerError = () => {
+export default function ServerError() {
     const {state} = useLocation();
 
     return (
@@ -21,5 +21,3 @@ const ServerError = () => {
         </Container>
     )
 }
-
-export default ServerError;
