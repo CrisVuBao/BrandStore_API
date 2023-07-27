@@ -3,6 +3,7 @@ using BrandStore.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Threading.Tasks;
 
 namespace BrandStore.Controllers
@@ -20,12 +21,9 @@ namespace BrandStore.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<Basket>> GetBasket() 
+        public async Task<ActionResult<Basket>> GetBasket()
         {
-            var basket = await _context.Baskets
-                .Include(i => i.Items)
-                .ThenInclude(p => p.Product)
-                .FirstOrDefaultAsync(x => x.BuyerId == Request.Cookies["buyerId"]);
+            var basket = await RetrieveBasket();
 
             if (basket == null) return NotFound();
 
@@ -36,11 +34,19 @@ namespace BrandStore.Controllers
         public async Task<ActionResult> AddItemBasket(int productId, int quantity)
         {
             // get basket
+            var basket = await RetrieveBasket();
             // create basket
+            if (basket == null) basket = CreateBasket(); // nếu giỏ hàng = null thì sẽ tạo ra 1 Guid buyerId, và được lưu trên cookies, và tạo ra 1 giỏ hàng mới theo buyerId đó
             // get product
+            var product = await _context.Products.FindAsync(productId);
+            if (product == null) return NotFound();
             // add item
+            basket.AddItem(product, quantity);
+
+            var result = await _context.SaveChangesAsync() > 0; // kiểm tra xem giá trị nếu có  > 0, thì đã có sự thay đổi ở CSDl(là ok)
             // save changes
-            return StatusCode(201);
+            if (result) return Ok("Add Items OK");
+            return BadRequest(new ProblemDetails { Title = "had problem add item in basket!!!"});
         }
 
         [HttpDelete]
@@ -50,6 +56,25 @@ namespace BrandStore.Controllers
             // remove item or reduce quantity
             // save changes
             return Ok();
+        }
+
+        // Đoạn code này được xây dựng để có thể các method get, post, put, delete dùng chung method này
+        private async Task<Basket> RetrieveBasket()
+        {
+            return await _context.Baskets
+                .Include(i => i.Items)
+                .ThenInclude(p => p.Product)
+                .FirstOrDefaultAsync(x => x.BuyerId == Request.Cookies["buyerId"]);
+        }
+
+        private Basket CreateBasket()
+        {
+            var buyerId = Guid.NewGuid().ToString();
+            var cookiesOptions = new CookieOptions { IsEssential = true , Expires = DateTime.Now.AddDays(30)};
+            Response.Cookies.Append("buyerId", buyerId, cookiesOptions);
+            var basket = new Basket {BuyerId = buyerId}; // tạo mới 1 Basket , có BuyerId của class Basket =  với buyerId của Guid(id tạo ngẫu nhiên)
+            _context.Baskets.Add(basket);
+            return basket;
         }
     }
 }
