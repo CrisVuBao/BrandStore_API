@@ -1,6 +1,6 @@
 import { Button, ButtonGroup, Typography } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { Cong, CounterState, Tru } from "./counterReducer";
+import { Cong, CounterState, Tru, cong, tru } from "./counterReducer";
 
 
 export default function ContactPage() {
@@ -16,8 +16,9 @@ export default function ContactPage() {
                 {title}
             </Typography>
             <ButtonGroup>
-                <Button onClick={() => dispatch({type: Tru})} variant="contained">-</Button>
-                <Button onClick={() => dispatch({type: Cong})} variant="contained">+</Button>
+                <Button onClick={() => dispatch(tru())} variant="contained">-</Button>
+                <Button onClick={() => dispatch(cong())} variant="contained">+</Button>
+                <Button onClick={() => dispatch(cong(5))} variant="contained">+ 5</Button>
             </ButtonGroup>
         </>
     )
