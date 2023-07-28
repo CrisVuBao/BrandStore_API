@@ -1,4 +1,4 @@
-import { Box, Grid, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
+import { Box, Button, Grid, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import { Add, Delete, Remove} from "@mui/icons-material";
 import { useStoreContext } from "../../app/context/StoreContext";
 import { useState } from "react";
@@ -7,6 +7,7 @@ import { error } from "console";
 import { LoadingButton } from "@mui/lab";
 import { loadavg } from "os";
 import BasketSumTotal from "./BasketSumTotal";
+import { Link } from "react-router-dom";
 
 export default function BasketPage() {
   const {basket, setBasket, removeItem} = useStoreContext(); // {basket} là giá trị được tham chiếu tới useStoreContext() để lấy các dữ liệu, thuộc tính từ bên useStoreContext()
@@ -95,7 +96,16 @@ export default function BasketPage() {
         <Grid container>
           <Grid item xs={6}/>
           <Grid item xs={6}>
-            <BasketSumTotal />
+            <BasketSumTotal /> {/**Component tổng tiền */}
+            <Button 
+              component={Link} // của React Router, để link đến các Route
+              to='/checkout'
+              variant='contained'
+              size='large'
+              fullWidth
+            >
+              Checkout
+            </Button>
           </Grid>
         </Grid>
       </>

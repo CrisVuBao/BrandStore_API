@@ -8,9 +8,10 @@ import LoadingComponent from "../../app/layout/LoadingComponent";
 import { currencyFormat } from "../../app/util/util";
 import { useStoreContext } from "../../app/context/StoreContext";
 import { LoadingButton } from "@mui/lab";
+import { error } from "console";
 
 export default function ProductDetails() {
-    const {basket} = useStoreContext(); // lấy data, properties của Basket
+    const {basket, setBasket, removeItem} = useStoreContext(); // lấy data, properties của Basket
     const { id } = useParams<{ id: string}>(); // usePrams thì truyền tham số vào phải là kiểu string, ko truyền kiểu number vào được (vì gốc của nó là kiểu string)
     const [itemProduct, setProduct] = useState<Product | null>(null); // truyền model Product vào trong useState để quản lý sản phẩm
     const [loading, setLoading] = useState(true);
@@ -19,12 +20,41 @@ export default function ProductDetails() {
     const item = basket?.items.find(i => i.productId === itemProduct?.id); // so sánh xem productId của Product có bằng productId của Basket hay không
 
     useEffect(() => {
-        if (item) setQuantity(item.quantity); // thêm số lượng(quantity) từ ProductDetails vào trong Basket
+        if (item) setQuantity(item.quantity); // thêm số lượng(quantity) từ Basket vào trong ProductDetails 
         id && agent.Catalog.details(parseInt(id))
             .then((Response) => setProduct(Response))
             .catch((error) => console.log(error.Response))
             .finally(() => setLoading(false)); // cuối cùng nếu lỗi thì là false
     }, [id, item]);
+
+    // hàm thay đổi số lượng trong chi tiết sản phẩm
+    const handleInputChange = (event: any) => {
+        if (event.target.value >= 0) { // chỉ cho lựa chọn quantity lớn hơn 0 
+            setQuantity(parseInt(event.target.value));
+        }
+    }
+
+    // hàm cập nhật thêm quantity product từ ProductDetails vào trong Basket
+    const handleUpdateCart = () => {
+        setSubmitting(true);
+        // '!item' là kiểm tra xem nếu ko có product trong Basket thì trả về true, và nếu số lượng(quantity) của button mà lớn hơn số lượng có trong Basket thì cũng trả về true
+//Nếu có item thì (quantity muốn thêm trong button trừ cho số lượng item hiện có trong Basket)
+        if (!item || quantity > item.quantity) {
+            const updatedQuantity = item ? quantity - item.quantity : quantity; // Ex: nếu trong Details của iphone 15 muốn thêm là 10, nhưng trong Basket đã có 8, thì lấy 10 - 8 = 2  
+            agent.Basket.addItem(itemProduct?.id!, updatedQuantity) // Như Ex ở trên: sẽ lòi ra 2 (10 - 8 = 2), thì sẽ có thêm 2 sản phẩm iphone 15 được cộng thêm vào trong Basket
+                .then(basket => setBasket(basket))
+                .catch(error => console.log(error))
+                .finally(() => setSubmitting(false))
+        } 
+        else {
+            const updatedQuantity = item.quantity - quantity;
+            agent.Basket.removeItem(itemProduct?.id!, updatedQuantity) // itemProduct?.id! là có thể là null cũng dc, ! là undefiend cũng dc
+                .then(() => removeItem(itemProduct?.id!, quantity))
+                .catch(error => console.log(error))
+                .finally(() => setSubmitting(false));
+        }
+    }
+
 
     if (loading) return <LoadingComponent />;
     if (!itemProduct) return <NotFound />; // nếu id sản phẩm ko có, thì sẽ chuyển qua NotFound
@@ -74,6 +104,7 @@ export default function ProductDetails() {
                 <Grid container spacing={2}>
                     <Grid item xs={6}> {/*xs: là muốn truyền bao nhiều số cột bên trong, như đây là Grid sẽ lấy 6 cột trong 12 cột */}
                         <TextField 
+                            onChange={handleInputChange}
                             variant="outlined"
                             type="number"
                             label='Quantity in Cart'
@@ -83,6 +114,8 @@ export default function ProductDetails() {
                     </Grid>
                     <Grid item xs={6}> {/*xs: là muốn truyền bao nhiều số cột bên trong, như đây là Grid sẽ lấy 6 cột trong 12 cột */}
                         <LoadingButton
+                            disabled={item?.quantity === quantity || quantity === 0} // nếu số lượng trong giỏ hàng bằng với với số lượng trong ProductDetails , hoặc số lượng bằng không thì ẩn Button
+                            onClick={handleUpdateCart}
                             sx={{height: '55px'}}
                             color="primary"
                             size="large"

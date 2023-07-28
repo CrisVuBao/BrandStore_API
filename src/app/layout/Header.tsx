@@ -105,7 +105,7 @@ export default function Header({darkMode, handleThemeChange} : Props) {
                       <FormControlLabel
                           // checked={darkMode} giá trị mặc định của darkMode là false(light), còn khi onChange={handleThemChange} là true(dark)
                           control={<MaterialUISwitch sx={{ m: 1}} defaultChecked checked={darkMode} onChange={handleThemeChange}/>}
-                          label="MUI switch"
+                          label="Switch Dark | Light"
                       />
                   </FormGroup>
               </Box>
