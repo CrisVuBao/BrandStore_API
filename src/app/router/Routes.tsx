@@ -10,7 +10,7 @@ import NotFound from "../errors/NotFound";
 import BasketPage from "../../features/basket/BasketPage";
 import CheckoutPage from "../../features/checkout/CheckoutPage";
 
-export const router = createBrowserRouter([ // đây là BrowserRouter
+export const router = createBrowserRouter([ // đây là RouterProvider
     {
         path: '/',
         element: <App />,
