@@ -22,6 +22,9 @@ export default function App() { // Function Components
       .catch(error => console.log(error))
       .finally(() => setLoading(false));
     } 
+    else {
+      setLoading(false); // lỗi thì ko hiện icon quay quay setLoading nữa
+    }
   }, [setBasket])
 
   const [darkMode, setDarkMode] = useState(false);

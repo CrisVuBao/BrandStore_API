@@ -1,23 +1,9 @@
-import { useEffect, useState } from "react";
-import { Basket } from "../../app/models/basket";
-import agent from "../../app/api/agent";
-import LoadingComponent from "../../app/layout/LoadingComponent";
-import { Box, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
-import { Add, Delete, Remove } from "@mui/icons-material";
-import { LoadingButton } from "@mui/lab";
+import { IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
+import { Delete} from "@mui/icons-material";
+import { useStoreContext } from "../../app/context/StoreContext";
 
 export default function BasketPage() {
-    const [loading, setLoading] = useState(true);
-    const [basket, setBasket] = useState<Basket | null>(null);
-
-    useEffect(() => {
-        agent.Basket.get()
-            .then(basket => setBasket(basket))
-            .catch(error => console.log(error))
-            .finally(() => setLoading(false))
-    }, [])
-
-    if (loading) return <LoadingComponent message="Loading basket" />
+  const {basket} = useStoreContext(); // {basket} là giá trị được tham chiếu tới useStoreContext() để lấy các dữ liệu, thuộc tính từ bên useStoreContext()
 
     if (!basket) return <Typography variant="h3">Basket Empty !!!</Typography>
     
