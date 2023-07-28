@@ -5,11 +5,8 @@ import reportWebVitals from './reportWebVitals';
 import { RouterProvider } from 'react-router-dom';
 import { router } from './app/router/Routes';
 import { StoreProvider } from './app/context/StoreContext';
-import { configureStore } from './app/store/configureStore';
 import { Provider } from 'react-redux';
-
-const store = configureStore();
-console.log(store.getState());
+import { store } from './app/store/configureStore';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -17,7 +14,7 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <StoreProvider> {/*dùng StoreProvider để cung cấp data trong các thành phần children trong ứng dụng React */}
-      <Provider store={store}>
+      <Provider store={store}> {/* đây là phần Redux sẽ quản lý toàn bộ data, action của Web React */}
         <RouterProvider router={router}/>
       </Provider>
     </StoreProvider>
