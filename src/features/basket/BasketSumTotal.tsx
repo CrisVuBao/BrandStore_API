@@ -1,8 +1,15 @@
 import { TableContainer, Paper, Table, TableBody, TableRow, TableCell, Typography } from "@mui/material";
+import { useStoreContext } from "../../app/context/StoreContext";
+import { currencyFormat } from "../../app/util/util";
 
 export default function BasketSumTotal() {
-    const subtotal = 0;
-    const deliveryFee = 0;
+    const {basket} = useStoreContext();
+
+    // Biểu thức item.quantity * item.price tính giá trị của một phần tử trong mảng (tích giá tiền của một sản phẩm với số lượng của nó).
+// Tham số thứ hai của reduce là giá trị khởi tạo ban đầu cho biến sum, ở đây là 0.
+// "??" 0: Nếu kết quả sau khi tính toán reduce là undefined (do basket hoặc basket.items không tồn tại), hoặc là một giá trị không xác định (NaN), thì ?? 0 sẽ gán giá trị 0 cho subtotal.    
+    const subtotal = basket?.items.reduce((sum, item) => sum + (item.quantity * item.price), 0) ?? 0;
+    const deliveryFee = subtotal > 1000 ? 0 : 30000;
 
     return (
         <>
@@ -11,15 +18,15 @@ export default function BasketSumTotal() {
                     <TableBody>
                         <TableRow>
                             <TableCell colSpan={2}>Subtotal</TableCell>
-                            <TableCell align="right">{subtotal}</TableCell>
+                            <TableCell align="right">{currencyFormat(subtotal)}</TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell colSpan={2}>Delivery fee*</TableCell>
-                            <TableCell align="right">{deliveryFee}</TableCell>
+                            <TableCell align="right">{currencyFormat(deliveryFee)}</TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell colSpan={2}>Total</TableCell>
-                            <TableCell align="right">{subtotal + deliveryFee}</TableCell>
+                            <TableCell align="right">{currencyFormat(subtotal + deliveryFee)}</TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell>
