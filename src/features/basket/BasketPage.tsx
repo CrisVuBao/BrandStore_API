@@ -9,6 +9,9 @@ import { loadavg } from "os";
 
 export default function BasketPage() {
   const {basket, setBasket, removeItem} = useStoreContext(); // {basket} là giá trị được tham chiếu tới useStoreContext() để lấy các dữ liệu, thuộc tính từ bên useStoreContext()
+  const [fixCommit, setFixCommit] = useState("");
+
+  // Trừ hoặc Cộng, hoặc Remove sản phẩm trong Basket, Thêm setStatus để icon Loading sẽ quay từng button riêng lẻ, ko quay chung nữa (BasketPage.tsx)
   const [status, setStatus] = useState({
     loading: false,
     name: ''
