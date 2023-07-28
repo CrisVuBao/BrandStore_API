@@ -5,27 +5,31 @@ import { useState } from "react";
 import agent from "../../app/api/agent";
 import { error } from "console";
 import { LoadingButton } from "@mui/lab";
+import { loadavg } from "os";
 
 export default function BasketPage() {
   const {basket, setBasket, removeItem} = useStoreContext(); // {basket} là giá trị được tham chiếu tới useStoreContext() để lấy các dữ liệu, thuộc tính từ bên useStoreContext()
-  const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState({
+    loading: false,
+    name: ''
+  });
 
   // cộng thêm số lượng sản phẩm muốn thêm
-  const handleAddItem = (productId: number) => {
-    setLoading(true);
+  const handleAddItem = (productId: number, name: string) => {
+    setStatus({loading: true, name});
     agent.Basket.addItem(productId) // thêm sản phẩm theo productId
       .then(basket => setBasket(basket))
       .catch(error => console.log(error))
-      .finally(() => setLoading(false)) // khi cộng thêm số lượng product rồi, thì ko hiện icon loading nữa
+      .finally(() => setStatus({loading: false, name: ''}))
   }
 
   // trừ đi số lượng sản phẩm trong Basket
-  const handleRemoveItem = (productId: number, quantity = 1)  => {
-    setLoading(true);
+  const handleRemoveItem = (productId: number, quantity = 1, name: string)  => {
+    setStatus({loading: true, name});
     agent.Basket.removeItem(productId, quantity)
         .then(() => removeItem(productId, quantity))
         .catch(error => console.log(error))
-        .finally(() => setLoading(false)) // khi xóa product xong rồi, thì ko hiện icon loading nữa
+        .finally(() => setStatus({loading: false, name: ''}))
   }
 
   if (!basket) return <Typography variant="h3">Basket Empty !!!</Typography>
@@ -56,17 +60,25 @@ export default function BasketPage() {
                 </TableCell>
                 <TableCell align="right">{(item.price / 100).toFixed(3)} VNĐ</TableCell>
                 <TableCell align="center">
-                  <LoadingButton loading={loading} color="error" onClick={() => handleRemoveItem(item.productId)}> {/*đây là xóa theo từng productId, hết productId này còn productId khác, dù có trùng productId */}
+                  <LoadingButton 
+                    loading={status.loading && status.name === 'rem' + item.productId } 
+                    color="error" 
+                    onClick={() => handleRemoveItem(item.productId, 1, 'rem' + item.productId)}> {/*đây là xóa theo từng productId, hết productId này còn productId khác, dù có trùng productId */}
                     <Remove />
                   </LoadingButton>  
                   {item.quantity}
-                  <LoadingButton loading={loading} color="error" onClick={() => handleAddItem(item.productId)}>
+                  <LoadingButton loading={status.loading && status.name === 'add' + item.productId} 
+                    color="primary" 
+                    onClick={() => handleAddItem(item.productId, 'add' + item.productId)}>
                     <Add />
                   </LoadingButton>  
                 </TableCell>
                 <TableCell align="right">{(item.price * item.quantity).toFixed(3)} VNĐ</TableCell>
                 <TableCell align="right">
-                    <LoadingButton loading={loading} color="error" onClick={() => handleRemoveItem(item.productId, item.quantity)}> {/*xóa như này là xóa cả productId, và xóa hết luôn số lượng product trong giỏ hàng */}
+                    <LoadingButton
+                      loading={status.loading && status.name === 'del' + item.productId} 
+                      color="error" 
+                      onClick={() => handleRemoveItem(item.productId, item.quantity, 'del' + item.productId)}> {/*item.quantity là xóa cả productId, và xóa hết luôn số lượng product trong giỏ hàng */}
                         <Delete />
                     </LoadingButton>
                 </TableCell>
