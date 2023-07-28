@@ -5,6 +5,7 @@ import { useState } from "react";
 import agent from "../../app/api/agent";
 import { LoadingButton } from "@mui/lab";
 import { useStoreContext } from "../../app/context/StoreContext";
+import { currencyFormat } from "../../app/util/util";
 
 interface Props {
     itemProduct : Product;
@@ -42,7 +43,7 @@ export default function ProductCard({itemProduct} : Props) {
             />
             <CardContent>
                 <Typography gutterBottom color="secondary" variant="h5">
-                    {(itemProduct.price / 100).toFixed(3)} VNĐ
+                    {currencyFormat(itemProduct.price)}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
                     {itemProduct.brand} / {itemProduct.type}

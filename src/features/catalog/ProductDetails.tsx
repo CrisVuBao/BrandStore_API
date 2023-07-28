@@ -5,6 +5,7 @@ import { Product } from "../../app/models/product";
 import agent from "../../app/api/agent";
 import NotFound from "../../app/errors/NotFound";
 import LoadingComponent from "../../app/layout/LoadingComponent";
+import { currencyFormat } from "../../app/util/util";
 
 export default function ProductDetails() {
     const { id } = useParams<{ id: string}>(); // usePrams thì truyền tham số vào phải là kiểu string, ko truyền kiểu number vào được (vì gốc của nó là kiểu string)
@@ -34,7 +35,7 @@ export default function ProductDetails() {
                 <Typography variant="h3">{itemProduct.name}</Typography>
                 <Divider sx={{ mb: 2 }} />{" "}  {/*tạo 1 dải đường nhỏ, gạch chân bên dưới content */}   
                 <Typography variant="h4" color="primary">
-                    {(itemProduct.price / 100).toFixed(3)} VNĐ
+                    {currencyFormat(itemProduct.price)}
                 </Typography>
                 {/*Bên dưới là phần Table thông tin product */}
                 <TableContainer>
