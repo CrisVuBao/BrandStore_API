@@ -25,9 +25,9 @@ export const addBasketItemAsync = createAsyncThunk<Basket, {productId: number , 
 )
 
 //  khởi tạo ReduxThunk (để áp dụng async, await) cho việc xóa sản phẩm khỏi giỏ hàng
-export const removeBasketItemAsync = createAsyncThunk<void, {productId: number, quantity?: number}> (
+export const removeBasketItemAsync = createAsyncThunk<void, {productId: number, quantity: number, name?: string}> (
     'basket/removeBasketItemAsync',
-    async ({productId, quantity = 1}) => {
+    async ({productId, quantity}) => {
         try {
             await agent.Basket.removeItem(productId, quantity)
         } catch (error) {
@@ -57,13 +57,13 @@ export const basketSlice = createSlice({ // slice là một phần trạng thái
             state.status = 'idle';
         });
         builder.addCase(removeBasketItemAsync.pending, (state, action) => {
-            state.status = 'pendingRemoveItem' + action.meta.arg.productId;
+            state.status = 'pendingRemoveItem' + action.meta.arg.productId + action.meta.arg.name;
         });
         builder.addCase(removeBasketItemAsync.fulfilled, (state, action) => {
             const {productId, quantity} = action.meta.arg;
-            const itemIndex = state.basket?.items.findIndex(i => i.productId === productId); // tìm productId ở trong database bằng với productId của người tìm kiếm trên web bằng redux
+            const itemIndex = state.basket?.items.findIndex(i => i.productId === productId); // tìm productId ở trong database bằng với productId của người tìm kiếm(click product) trên web bằng redux
             if (itemIndex === -1 || itemIndex === undefined) return;
-            state.basket!.items[itemIndex].quantity -= quantity!; // lấy nguyên mảng của itemIndex(gồm các danh sách số lượng product trong basket), trừ cho số lượng muốn trừ (basket có 8 , số lượng muốn trừ là 1, thì 8-1 = 7) 
+            state.basket!.items[itemIndex].quantity -= quantity; // lấy nguyên mảng của itemIndex(gồm các danh sách số lượng product trong basket), trừ cho số lượng muốn trừ (basket có 8 , số lượng muốn trừ là 1, thì 8-1 = 7) 
             if (state.basket?.items[itemIndex].quantity === 0) {
                     state.basket.items.splice(itemIndex, 1); // splice() là để xóa một phần tử khỏi mảng items (nếu số lượng về 0, thì sẽ xóa luôn BasketItem khỏi giỏ hàng), và splice(itemIndex, 1) là xóa 1 phần tử
                 }

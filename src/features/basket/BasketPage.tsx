@@ -1,7 +1,5 @@
 import { Box, Button, Grid, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import { Add, Delete, Remove} from "@mui/icons-material";
-import { useState } from "react";
-import agent from "../../app/api/agent";
 import { LoadingButton } from "@mui/lab";
 import BasketSumTotal from "./BasketSumTotal";
 import { Link } from "react-router-dom";
@@ -42,14 +40,16 @@ export default function BasketPage() {
                   <TableCell align="right">{(item.price / 100).toFixed(3)} VNĐ</TableCell>
                   <TableCell align="center">
                     <LoadingButton 
-                      loading={status.includes('pendingRemoveItem' + item.productId) } 
+                      loading={status === 'pendingRemoveItem' + item.productId + 'rem'} 
                       color="error" 
-                      onClick={() => dispatch(removeBasketItemAsync({productId: item.productId}))}> {/*đây là xóa theo từng productId, hết productId này còn productId khác, dù có trùng productId */}
+                      onClick={() => dispatch(removeBasketItemAsync({
+                          productId: item.productId, quantity: 1, name: 'rem'
+                        }))}> {/*đây là xóa theo từng productId, hết productId này còn productId khác, dù có trùng productId */}
                       <Remove />
                     </LoadingButton>  
                     {item.quantity}
                     <LoadingButton 
-                      loading={status.includes('pendingAddItem' + item.productId)} 
+                      loading={status === 'pendingAddItem' + item.productId} 
                       color="primary" 
                       onClick={() => dispatch(addBasketItemAsync({productId: item.productId}))}>
                       <Add />
@@ -58,9 +58,11 @@ export default function BasketPage() {
                   <TableCell align="right">{(item.price * item.quantity).toFixed(3)} VNĐ</TableCell>
                   <TableCell align="right">
                       <LoadingButton
-                        loading={status.includes('pendingRemoveItem' + item.productId)} 
+                        loading={status === 'pendingRemoveItem' + item.productId + 'del'} 
                         color="error" 
-                        onClick={() => dispatch(removeBasketItemAsync({productId: item.productId, quantity: item.quantity}))}> {/*item.quantity là xóa cả productId, và xóa hết luôn số lượng product trong giỏ hàng */}
+                        onClick={() => dispatch(removeBasketItemAsync({
+                            productId: item.productId, quantity: item.quantity, name: 'del'
+                          }))}> {/*item.quantity là xóa cả productId, và xóa hết luôn số lượng product trong giỏ hàng */}
                           <Delete />
                       </LoadingButton>
                   </TableCell>

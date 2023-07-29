@@ -9,7 +9,7 @@ import { currencyFormat } from "../../app/util/util";
 import { LoadingButton } from "@mui/lab";
 import { error } from "console";
 import { useAppDispatch, useAppSelector } from "../../app/store/configureStore";
-import {addBasketItemAsync, removeBasketItemAsync, setBasket } from "../basket/basketSlice";
+import {addBasketItemAsync, removeBasketItemAsync } from "../basket/basketSlice";
 
 export default function ProductDetails() {
     // const {basket, setBasket, removeItem} = useStoreContext(); // lấy data, properties của Basket
