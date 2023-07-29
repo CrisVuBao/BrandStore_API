@@ -12,7 +12,6 @@ interface Props {
 }
 
 export default function ProductCard({itemProduct} : Props) {
-    const [loading, setLoading] = useState(false);
     const {status} = useAppSelector(state =>  state.basket);
     const dispatch = useAppDispatch();
 
