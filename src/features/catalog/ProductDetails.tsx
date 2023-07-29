@@ -105,7 +105,7 @@ export default function ProductDetails() {
                     <Grid item xs={6}> {/*xs: là muốn truyền bao nhiều số cột bên trong, như đây là Grid sẽ lấy 6 cột trong 12 cột */}
                         <LoadingButton
                             disabled={item?.quantity === quantity} // nếu số lượng trong giỏ hàng bằng với với số lượng trong ProductDetails , hoặc số lượng bằng không thì ẩn Button
-                            loading={status.includes('pendingRemoveItem' + item?.productId)}
+                            loading={status.includes('pending')}
                             onClick={handleUpdateCart}
                             sx={{height: '55px'}}
                             color="primary"

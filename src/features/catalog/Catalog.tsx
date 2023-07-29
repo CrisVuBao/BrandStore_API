@@ -1,8 +1,7 @@
-import agent from "../../app/api/agent";
 import LoadingComponent from "../../app/layout/LoadingComponent";
 import { useAppDispatch, useAppSelector } from "../../app/store/configureStore";
 import ProductList from "./ProductList";
-import { useEffect, useState } from "react";
+import { useEffect} from "react";
 import { fetchProductsAsync, productSelectors } from "./catalogSlice";
 
 export default function Catalog() {

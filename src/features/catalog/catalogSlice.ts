@@ -8,24 +8,24 @@ const productsAdapter = createEntityAdapter<Product>();
 // fetch danh sách product
 export const fetchProductsAsync = createAsyncThunk<Product[]> (
     'catalog/fetchProductsAsync',
-    async () => {
+    async (_, thunkAPI) => {
         try {
             return await agent.Catalog.list();
-        } catch (error) {
-            console.log(error);
-        }
+        } catch (error: any) {
+            return thunkAPI.rejectWithValue({error: error.data})
+        } 
     }
 )
 
 // fetch product đơn lẻ
 export const fetchProductAsync = createAsyncThunk<Product, number> (
     'catalog/fetchProductAsync',
-    async (productId) => {
+    async (productId, thunkAPI) => {
         try {
             return await agent.Catalog.details(productId); // lấy từng product theo Id
-        } catch (error) {
-            console.log(error);
-        }
+        } catch (error: any) {
+                return thunkAPI.rejectWithValue({error: error.data})
+            }
     }
 )
 
@@ -46,17 +46,19 @@ export const catalogSlice = createSlice({
             state.status = 'idle'; // cập nhật trạng thái thành 'ko có gì để cập nhật thêm trạng thái'
             state.productsLoaded = true; // và rồi trả về là load sản phẩm đã thành công
         });
-        builder.addCase(fetchProductsAsync.rejected, (state) => {
+        builder.addCase(fetchProductsAsync.rejected, (state, action) => {
+            console.log(action);
             state.status = 'idle';  
         });
-        builder.addCase(fetchProductAsync.pending, (state) => {
+        builder.addCase(fetchProductAsync.pending, (state) => { 
             state.status = 'pendingFetchProduct';
         });
         builder.addCase(fetchProductAsync.fulfilled, (state, action) => {
             productsAdapter.upsertOne(state, action.payload);
             state.status = 'idle';
         });
-        builder.addCase(fetchProductAsync.rejected, (state) => {
+        builder.addCase(fetchProductAsync.rejected, (state, action) => {
+            console.log(action);
             state.status = 'idle';
         })
     })

@@ -6,7 +6,6 @@ import { LoadingButton } from "@mui/lab";
 import { currencyFormat } from "../../app/util/util";
 import { addBasketItemAsync, setBasket } from "../basket/basketSlice";
 import { useAppDispatch, useAppSelector } from "../../app/store/configureStore";
-import { useSelector } from "react-redux";
 
 interface Props {
     itemProduct : Product;
