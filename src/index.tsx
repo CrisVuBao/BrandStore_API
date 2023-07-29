@@ -7,13 +7,11 @@ import { router } from './app/router/Routes';
 import { StoreProvider } from './app/context/StoreContext';
 import { Provider } from 'react-redux';
 import { store } from './app/store/configureStore';
-import { fetchProductsAsync } from './features/catalog/catalogSlice';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 
-store.dispatch(fetchProductsAsync()); // load sản phẩm luôn cùng với ứng dụng khi khởi động npm start
 
 root.render(
   <React.StrictMode>

@@ -1,20 +1,20 @@
 import agent from "../../app/api/agent";
 import LoadingComponent from "../../app/layout/LoadingComponent";
-import { Product } from "../../app/models/product";
+import { useAppDispatch, useAppSelector } from "../../app/store/configureStore";
 import ProductList from "./ProductList";
 import { useEffect, useState } from "react";
+import { fetchProductsAsync, productSelectors } from "./catalogSlice";
 
 export default function Catalog() {
-    const [products, setProduct] = useState<Product[]>([]);
-    const [loading, setLoading] = useState(true);
+    const products = useAppSelector(productSelectors.selectAll);
+    const {productsLoaded, status} = useAppSelector(state => state.catalog);
+    const dispatch = useAppDispatch();
 
     useEffect(() => {
-        agent.Catalog.list()
-        .then(products => setProduct(products))
-        .finally(() => setLoading(false))
-    }, []);
+        if (!productsLoaded) dispatch(fetchProductsAsync());
+    }, [productsLoaded]); // nếu giá trị ở trong mảng [productsLoaded] thay đổi, thì useEffect sẽ được gọi lại và thực thi lại hàm bên trong nó
 
-    if (loading) return <LoadingComponent />
+    if (status.includes('pending')) return <LoadingComponent message="Loading products..."/>
 
     return ( // this is place generate UI 
         <>
