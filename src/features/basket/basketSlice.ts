@@ -1,13 +1,28 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { Basket } from "../../app/models/basket";
+import agent from "../../app/api/agent";
 
 interface BasketState {
-    basket: Basket | null
+    basket: Basket | null,
+    status: string;
 }
 
 const initialState: BasketState = {
-    basket: null
+    basket: null,
+    status: 'idle'
 }
+
+// khởi tạo ReduxThunk (để áp dụng async, await)
+export const addBasketItemAsync = createAsyncThunk<Basket, {productId: number , quantity: number} > (
+    'basket/addBasketItemAsync',
+    async ({productId, quantity}) => {
+        try {
+            return await agent.Basket.addItem(productId, quantity);
+        } catch(error) {
+            console.log(error);
+        }
+    }
+)
 
 export const basketSlice = createSlice({ // slice là một phần trạng thái của ứng dụng
     name: 'basket', // tên của slice
@@ -26,7 +41,21 @@ export const basketSlice = createSlice({ // slice là một phần trạng thái
                 }
         }
 
-    }
+    },
+    extraReducers: (builder => {
+        builder.addCase(addBasketItemAsync.pending, (state, action) => { // tác dụng của cái này là vào trạng thái đang chờ xử lý
+            console.log(action);
+            state.status = 'pendingAddItem';
+        });
+        builder.addCase(addBasketItemAsync.fulfilled, (state, action) => {
+            console.log(action);
+            state.status = 'idle';
+        });
+        builder.addCase(addBasketItemAsync.rejected, (state, action) => {
+            console.log(action);
+            state.status = 'idle';
+        });
+    })
 });
 
 export const {setBasket, removeItem} = basketSlice.actions;
