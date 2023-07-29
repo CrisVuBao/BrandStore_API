@@ -6,7 +6,7 @@ import { cong, tru } from "./counterSlice";
 
 export default function ContactPage() {
     const dispatch = useDispatch();
-    const {data, title} = useAppSelector(state => state.counter); // lấy các data, action (data = data + action.payload, data = data - action.payload) của createSlice()
+    const {data, title} = useAppSelector(state => state.counter); // lấy các data và state.data, action (data = data + action.payload, data = data - action.payload) của createSlice()
 
     return (
         <>

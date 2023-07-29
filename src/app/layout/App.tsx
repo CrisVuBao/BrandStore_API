@@ -1,31 +1,31 @@
-import React, { useEffect, useState } from 'react'; // this is React Hook
+import { useEffect, useState } from 'react'; // this is React Hook
 import Header from './Header';
-import { Container, CssBaseline, Paper, ThemeProvider, createTheme, useStepContext } from '@mui/material';
+import { Container, CssBaseline, Paper, ThemeProvider, createTheme} from '@mui/material';
 import { Outlet } from 'react-router-dom';
 import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useStoreContext } from '../context/StoreContext';
 import agent from '../api/agent';
-import { error } from 'console';
 import LoadingComponent from './LoadingComponent';
 import { getCookie } from '../util/util';
+import { useAppDishpatch } from '../store/configureStore';
+import {setBasket} from '../../features/basket/basketSlice';
 
 export default function App() { // Function Components
-  const {setBasket} = useStoreContext();
+  const dispatch = useAppDishpatch();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const buyerId = getCookie('buyerId'); // lấy Cookies buyerId
     if (buyerId) {
       agent.Basket.get()
-      .then(basket => setBasket(basket))
+      .then(basket => dispatch(setBasket(basket)))
       .catch(error => console.log(error))
       .finally(() => setLoading(false));
     } 
     else {
       setLoading(false); // lỗi thì ko hiện icon quay quay setLoading nữa
     }
-  }, [setBasket])
+  }, [dispatch])
 
   const [darkMode, setDarkMode] = useState(false);
   const paletteType = darkMode ? "dark" : "light";

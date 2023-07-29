@@ -26,7 +26,6 @@ export function StoreProvider({children}: PropsWithChildren<any>) {
         if (!basket) return;
         const items = [...basket.items]; // những thuộc tính như productId, name, price, quantity sẽ bằng biến const items
         const itemIndex = items.findIndex(i => i.productId == productId); // index của productId sẽ bằng với productId của hàm removeItem
-    
         if(itemIndex >= 0) {
             items[itemIndex].quantity -= quantity; //lọc quantity theo productId, để biết là của product nào,  nếu quantity lớn hơn 0, thì sẽ cho phép trừ đi (quantity = quantity - quantity)
             if (items[itemIndex].quantity === 0) items.splice(itemIndex, 1); // nếu quantity của product đó  = 0, thì sẽ dùng method splice(itemIndex, 1) để xóa product theo productId

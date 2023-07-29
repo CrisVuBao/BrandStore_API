@@ -11,6 +11,7 @@ const initialState: CounterState = {
     title: 'Redux Export Counter'
 }
 
+// đây là theo phong cách xử lý của Redux
 export const counterSlice = createSlice({
     name: 'counter',
     initialState,

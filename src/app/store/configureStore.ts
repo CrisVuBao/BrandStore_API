@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { counterSlice } from '../../features/contact/counterSlice';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
+import { basketSlice } from '../../features/basket/basketSlice';
 
 // export function configureStore() {
 //     return createStore(counterReducer) // tạo ra 1 cái createStore() để truyền dữ liệu từ counterReducer vào trong store, và rồi sẽ khởi tạo store bằng hàm của redux, và store là thằng quản lý toàn bộ dữ liệu
@@ -8,7 +9,8 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 
 export const store = configureStore({ // hàm configureStore của Redux Toolkit
         reducer: {
-            counter: counterSlice.reducer // đây là phần sẽ lấy các reducer cộng, trừ ném cho redux xử lý (chính xác là lấy data = data + 1, và data = data - 1 của bên slice)
+            counter: counterSlice.reducer, // đây là phần sẽ lấy các reducer cộng, trừ ném cho redux xử lý (chính xác là lấy data = data + 1, và data = data - 1 của bên slice)
+            basket: basketSlice.reducer
         }
 });
 
