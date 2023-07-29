@@ -13,7 +13,7 @@ const initialState: BasketState = {
 }
 
 // khởi tạo ReduxThunk (để áp dụng async, await)
-export const addBasketItemAsync = createAsyncThunk<Basket, {productId: number , quantity: number} > (
+export const addBasketItemAsync = createAsyncThunk<Basket, {productId: number , quantity?: number} > (
     'basket/addBasketItemAsync',
     async ({productId, quantity}) => {
         try {
@@ -45,14 +45,13 @@ export const basketSlice = createSlice({ // slice là một phần trạng thái
     extraReducers: (builder => {
         builder.addCase(addBasketItemAsync.pending, (state, action) => { // tác dụng của cái này là vào trạng thái đang chờ xử lý
             console.log(action);
-            state.status = 'pendingAddItem';
+            state.status = 'pendingAddItem' +  action.meta.arg.productId;
         });
         builder.addCase(addBasketItemAsync.fulfilled, (state, action) => {
-            console.log(action);
+            state.basket = action.payload;
             state.status = 'idle';
         });
         builder.addCase(addBasketItemAsync.rejected, (state, action) => {
-            console.log(action);
             state.status = 'idle';
         });
     })
