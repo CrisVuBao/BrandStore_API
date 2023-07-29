@@ -9,17 +9,16 @@ import { currencyFormat } from "../../app/util/util";
 import { LoadingButton } from "@mui/lab";
 import { error } from "console";
 import { useAppDispatch, useAppSelector } from "../../app/store/configureStore";
-import { removeItem, setBasket } from "../basket/basketSlice";
+import {addBasketItemAsync, removeBasketItemAsync, setBasket } from "../basket/basketSlice";
 
 export default function ProductDetails() {
     // const {basket, setBasket, removeItem} = useStoreContext(); // lấy data, properties của Basket
-    const {basket} = useAppSelector(state => state.basket);
+    const {basket, status} = useAppSelector(state => state.basket);
     const dispatch = useAppDispatch();
     const { id } = useParams<{ id: string}>(); // usePrams thì truyền tham số vào phải là kiểu string, ko truyền kiểu number vào được (vì gốc của nó là kiểu string)
     const [itemProduct, setProduct] = useState<Product | null>(null); // truyền model Product vào trong useState để quản lý sản phẩm
     const [loading, setLoading] = useState(true);
     const [quantity, setQuantity] = useState(0);
-    const [submitting, setSubmitting] = useState(false);
     const item = basket?.items.find(i => i.productId === itemProduct?.id); // so sánh xem productId của Product có bằng productId của Basket hay không
 
     useEffect(() => {
@@ -39,22 +38,15 @@ export default function ProductDetails() {
 
     // hàm cập nhật thêm quantity product từ ProductDetails vào trong Basket
     const handleUpdateCart = () => {
-        setSubmitting(true);
         // '!item' là kiểm tra xem nếu ko có product trong Basket thì trả về true, và nếu số lượng(quantity) của button mà lớn hơn số lượng có trong Basket thì cũng trả về true
 //Nếu có item thì (quantity muốn thêm trong button trừ cho số lượng item hiện có trong Basket)
         if (!item || quantity > item.quantity) {
             const updatedQuantity = item ? quantity - item.quantity : quantity; // Ex: nếu trong Details của iphone 15 muốn thêm là 10, nhưng trong Basket đã có 8, thì lấy 10 - 8 = 2  
-            agent.Basket.addItem(itemProduct?.id!, updatedQuantity) // Như Ex ở trên: sẽ lòi ra 2 (10 - 8 = 2), thì sẽ có thêm 2 sản phẩm iphone 15 được cộng thêm vào trong Basket
-                .then(basket => dispatch(setBasket(basket)))
-                .catch(error => console.log(error))
-                .finally(() => setSubmitting(false))
+            dispatch(addBasketItemAsync({productId: itemProduct?.id!, quantity: updatedQuantity}))
         } 
         else {
             const updatedQuantity = item.quantity - quantity;
-            agent.Basket.removeItem(itemProduct?.id!, updatedQuantity) // itemProduct?.id! là có thể là null cũng dc, ! là undefiend cũng dc
-                .then(() => dispatch(removeItem({productId: itemProduct?.id!, quantity: updatedQuantity}))) // phải gán itemProduct.id cho productId, quantity cũng vây, để cho nó bằng với các thuộc tính của bên creatSlice() của Redux
-                .catch(error => console.log(error))
-                .finally(() => setSubmitting(false));
+             dispatch(removeBasketItemAsync({productId: itemProduct?.id!, quantity: updatedQuantity}))
         }
     }
 
@@ -117,7 +109,8 @@ export default function ProductDetails() {
                     </Grid>
                     <Grid item xs={6}> {/*xs: là muốn truyền bao nhiều số cột bên trong, như đây là Grid sẽ lấy 6 cột trong 12 cột */}
                         <LoadingButton
-                            disabled={item?.quantity === quantity || quantity === 0} // nếu số lượng trong giỏ hàng bằng với với số lượng trong ProductDetails , hoặc số lượng bằng không thì ẩn Button
+                            disabled={item?.quantity === quantity} // nếu số lượng trong giỏ hàng bằng với với số lượng trong ProductDetails , hoặc số lượng bằng không thì ẩn Button
+                            loading={status.includes('pendingRemoveItem' + item?.productId)}
                             onClick={handleUpdateCart}
                             sx={{height: '55px'}}
                             color="primary"

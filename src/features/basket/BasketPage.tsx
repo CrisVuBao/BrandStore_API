@@ -6,35 +6,11 @@ import { LoadingButton } from "@mui/lab";
 import BasketSumTotal from "./BasketSumTotal";
 import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../app/store/configureStore";
-import { removeItem, setBasket } from "./basketSlice";
+import { addBasketItemAsync, removeBasketItemAsync, setBasket } from "./basketSlice";
 
 export default function BasketPage() {
-  const {basket} = useAppSelector(state => state.basket); // {basket} là giá trị được tham chiếu tới useStoreContext() để lấy các dữ liệu, thuộc tính từ bên useStoreContext()
+  const {basket, status} = useAppSelector(state => state.basket); // {basket} là giá trị được tham chiếu tới useStoreContext() để lấy các dữ liệu, thuộc tính từ bên useStoreContext()
   const dispatch = useAppDispatch();
-
-  // Trừ hoặc Cộng, hoặc Remove sản phẩm trong Basket, Thêm setStatus để icon Loading sẽ quay từng button riêng lẻ, ko quay chung nữa (BasketPage.tsx)
-  const [status, setStatus] = useState({
-    loading: false,
-    name: ''
-  });
-
-  // cộng thêm số lượng sản phẩm muốn thêm
-  const handleAddItem = (productId: number, name: string) => {
-    setStatus({loading: true, name});
-    agent.Basket.addItem(productId) // thêm sản phẩm theo productId
-      .then(basket => dispatch(setBasket(basket))) // dispatch gửi các action lên cho Redux quản lý
-      .catch(error => console.log(error))
-      .finally(() => setStatus({loading: false, name: ''}))
-  }
-
-  // trừ đi số lượng sản phẩm trong Basket
-  const handleRemoveItem = (productId: number, quantity = 1, name: string)  => {
-    setStatus({loading: true, name});
-    agent.Basket.removeItem(productId, quantity)
-        .then(() => dispatch(removeItem({productId, quantity}))) // vì các tham số productId, quantity của bên removeItem của Slice được khởi tạo là danh sách object, nên bên này cũng phải truyền {productId, quantity} để nó cũng là truyền vào object
-        .catch(error => console.log(error))
-        .finally(() => setStatus({loading: false, name: ''}))
-  }
 
   if (!basket) return <Typography variant="h3">Basket Empty !!!</Typography>
     
@@ -66,24 +42,25 @@ export default function BasketPage() {
                   <TableCell align="right">{(item.price / 100).toFixed(3)} VNĐ</TableCell>
                   <TableCell align="center">
                     <LoadingButton 
-                      loading={status.loading && status.name === 'rem' + item.productId } 
+                      loading={status.includes('pendingRemoveItem' + item.productId) } 
                       color="error" 
-                      onClick={() => handleRemoveItem(item.productId, 1, 'rem' + item.productId)}> {/*đây là xóa theo từng productId, hết productId này còn productId khác, dù có trùng productId */}
+                      onClick={() => dispatch(removeBasketItemAsync({productId: item.productId}))}> {/*đây là xóa theo từng productId, hết productId này còn productId khác, dù có trùng productId */}
                       <Remove />
                     </LoadingButton>  
                     {item.quantity}
-                    <LoadingButton loading={status.loading && status.name === 'add' + item.productId} 
+                    <LoadingButton 
+                      loading={status.includes('pendingAddItem' + item.productId)} 
                       color="primary" 
-                      onClick={() => handleAddItem(item.productId, 'add' + item.productId)}>
+                      onClick={() => dispatch(addBasketItemAsync({productId: item.productId}))}>
                       <Add />
                     </LoadingButton>  
                   </TableCell>
                   <TableCell align="right">{(item.price * item.quantity).toFixed(3)} VNĐ</TableCell>
                   <TableCell align="right">
                       <LoadingButton
-                        loading={status.loading && status.name === 'del' + item.productId} 
+                        loading={status.includes('pendingRemoveItem' + item.productId)} 
                         color="error" 
-                        onClick={() => handleRemoveItem(item.productId, item.quantity, 'del' + item.productId)}> {/*item.quantity là xóa cả productId, và xóa hết luôn số lượng product trong giỏ hàng */}
+                        onClick={() => dispatch(removeBasketItemAsync({productId: item.productId, quantity: item.quantity}))}> {/*item.quantity là xóa cả productId, và xóa hết luôn số lượng product trong giỏ hàng */}
                           <Delete />
                       </LoadingButton>
                   </TableCell>
