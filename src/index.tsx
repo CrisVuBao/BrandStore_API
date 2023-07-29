@@ -13,11 +13,9 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <StoreProvider> {/*dùng StoreProvider để cung cấp data trong các thành phần children trong ứng dụng React */}
       <Provider store={store}> {/* đây là phần Redux sẽ quản lý toàn bộ data, action của Web React */}
         <RouterProvider router={router}/>
       </Provider>
-    </StoreProvider>
   </React.StrictMode>
 );
 

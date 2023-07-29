@@ -1,17 +1,16 @@
 import { Box, Button, Grid, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import { Add, Delete, Remove} from "@mui/icons-material";
-import { useStoreContext } from "../../app/context/StoreContext";
 import { useState } from "react";
 import agent from "../../app/api/agent";
-import { error } from "console";
 import { LoadingButton } from "@mui/lab";
-import { loadavg } from "os";
 import BasketSumTotal from "./BasketSumTotal";
 import { Link } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../app/store/configureStore";
+import { removeItem, setBasket } from "./basketSlice";
 
 export default function BasketPage() {
-  const {basket, setBasket, removeItem} = useStoreContext(); // {basket} là giá trị được tham chiếu tới useStoreContext() để lấy các dữ liệu, thuộc tính từ bên useStoreContext()
-  const [fixCommit, setFixCommit] = useState("");
+  const {basket} = useAppSelector(state => state.basket); // {basket} là giá trị được tham chiếu tới useStoreContext() để lấy các dữ liệu, thuộc tính từ bên useStoreContext()
+  const dispatch = useAppDispatch();
 
   // Trừ hoặc Cộng, hoặc Remove sản phẩm trong Basket, Thêm setStatus để icon Loading sẽ quay từng button riêng lẻ, ko quay chung nữa (BasketPage.tsx)
   const [status, setStatus] = useState({
@@ -23,7 +22,7 @@ export default function BasketPage() {
   const handleAddItem = (productId: number, name: string) => {
     setStatus({loading: true, name});
     agent.Basket.addItem(productId) // thêm sản phẩm theo productId
-      .then(basket => setBasket(basket))
+      .then(basket => dispatch(setBasket(basket))) // dispatch gửi các action lên cho Redux quản lý
       .catch(error => console.log(error))
       .finally(() => setStatus({loading: false, name: ''}))
   }
@@ -32,7 +31,7 @@ export default function BasketPage() {
   const handleRemoveItem = (productId: number, quantity = 1, name: string)  => {
     setStatus({loading: true, name});
     agent.Basket.removeItem(productId, quantity)
-        .then(() => removeItem(productId, quantity))
+        .then(() => dispatch(removeItem({productId, quantity}))) // vì các tham số productId, quantity của bên removeItem của Slice được khởi tạo là danh sách object, nên bên này cũng phải truyền {productId, quantity} để nó cũng là truyền vào object
         .catch(error => console.log(error))
         .finally(() => setStatus({loading: false, name: ''}))
   }

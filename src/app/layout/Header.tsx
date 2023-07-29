@@ -2,6 +2,7 @@ import { ShoppingCart } from "@mui/icons-material";
 import { AppBar, Badge, Box, Container, FormControlLabel, FormGroup, IconButton, List, ListItem, Switch, Toolbar, Typography, colors, styled } from "@mui/material";
 import {Link, NavLink } from "react-router-dom";
 import { useStoreContext } from "../context/StoreContext";
+import { useAppDispatch, useAppSelector } from "../store/configureStore";
 
 const midLinks = [
   {title: 'catalog', path: '/catalog'},
@@ -31,7 +32,7 @@ interface Props {
 }
 
 export default function Header({darkMode, handleThemeChange} : Props) {
-  const {basket} = useStoreContext(); // {basket} là giá trị được tạo ra để tham chiếu tới useStoreContext để lấy data, thuộc tính bên useStoreContext()
+  const {basket} = useAppSelector(state => state.basket); // {basket} là giá trị được tạo ra để tham chiếu tới useAppSelector để lấy data từ Redux store
   const itemCount = basket?.items.reduce((sum, item) => sum + item.quantity, 0); // tính tổng số lượng product được thêm vào giỏ hàng, để hiện số trên icon giỏ hàng
 
     

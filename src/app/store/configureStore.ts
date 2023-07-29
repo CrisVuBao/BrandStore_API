@@ -17,7 +17,7 @@ export const store = configureStore({ // hàm configureStore của Redux Toolkit
 export type RootState = ReturnType<typeof store.getState>; // RootState đại diện cho trạng thái toàn bộ ứng dụng, và trong Redux store.
 export type AppDispatch = typeof store.dispatch; // typeof store.dispatch được sử dụng để trích xuất kiểu dữ liệu của hàm dispatch trong Redux store.
 
-export const useAppDishpatch = () => useDispatch<AppDispatch>(); // sử dụng dữ liệu được gán vào trong dishpatch, (như data = 100, data = data + 1, ...  được gắn vào dishpatch của Redux store)
+export const useAppDispatch = () => useDispatch<AppDispatch>(); // sử dụng dữ liệu được gán vào trong dishpatch, (như data = 100, data = data + 1, ...  được gắn vào dishpatch của Redux store)
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 // Như vậy, khi sử dụng các custom hook useAppDispatch và useAppSelector này, 
 //bạn sẽ có lợi ích của việc đã định nghĩa các kiểu dữ liệu đại diện cho hàm dispatch và trạng thái toàn bộ ứng dụng,

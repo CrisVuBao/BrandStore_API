@@ -7,11 +7,11 @@ import 'react-toastify/dist/ReactToastify.css';
 import agent from '../api/agent';
 import LoadingComponent from './LoadingComponent';
 import { getCookie } from '../util/util';
-import { useAppDishpatch } from '../store/configureStore';
+import { useAppDispatch } from '../store/configureStore';
 import {setBasket} from '../../features/basket/basketSlice';
 
 export default function App() { // Function Components
-  const dispatch = useAppDishpatch();
+  const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
