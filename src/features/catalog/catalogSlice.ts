@@ -5,11 +5,24 @@ import { RootState } from "../../app/store/configureStore";
 
 const productsAdapter = createEntityAdapter<Product>();
 
+// fetch danh sách product
 export const fetchProductsAsync = createAsyncThunk<Product[]> (
     'catalog/fetchProductsAsync',
     async () => {
         try {
             return await agent.Catalog.list();
+        } catch (error) {
+            console.log(error);
+        }
+    }
+)
+
+// fetch product đơn lẻ
+export const fetchProductAsync = createAsyncThunk<Product, number> (
+    'catalog/fetchProductAsync',
+    async (productId) => {
+        try {
+            return await agent.Catalog.details(productId); // lấy từng product theo Id
         } catch (error) {
             console.log(error);
         }
@@ -35,6 +48,16 @@ export const catalogSlice = createSlice({
         });
         builder.addCase(fetchProductsAsync.rejected, (state) => {
             state.status = 'idle';  
+        });
+        builder.addCase(fetchProductAsync.pending, (state) => {
+            state.status = 'pendingFetchProduct';
+        });
+        builder.addCase(fetchProductAsync.fulfilled, (state, action) => {
+            productsAdapter.upsertOne(state, action.payload);
+            state.status = 'idle';
+        });
+        builder.addCase(fetchProductAsync.rejected, (state) => {
+            state.status = 'idle';
         })
     })
 })

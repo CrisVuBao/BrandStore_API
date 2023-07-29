@@ -12,7 +12,7 @@ export default function Catalog() {
 
     useEffect(() => {
         if (!productsLoaded) dispatch(fetchProductsAsync());
-    }, [productsLoaded]); // nếu giá trị ở trong mảng [productsLoaded] thay đổi, thì useEffect sẽ được gọi lại và thực thi lại hàm bên trong nó
+    }, [productsLoaded, dispatch]); // nếu giá trị ở trong mảng [productsLoaded] thay đổi, thì useEffect sẽ được gọi lại và thực thi lại hàm bên trong nó
 
     if (status.includes('pending')) return <LoadingComponent message="Loading products..."/>
 

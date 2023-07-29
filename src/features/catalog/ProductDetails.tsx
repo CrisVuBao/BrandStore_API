@@ -1,33 +1,28 @@
 import { Divider,Grid,Table,TableBody,TableCell,TableContainer,TableRow,TextField,Typography,} from "@mui/material";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Product } from "../../app/models/product";
-import agent from "../../app/api/agent";
 import NotFound from "../../app/errors/NotFound";
 import LoadingComponent from "../../app/layout/LoadingComponent";
 import { currencyFormat } from "../../app/util/util";
 import { LoadingButton } from "@mui/lab";
-import { error } from "console";
 import { useAppDispatch, useAppSelector } from "../../app/store/configureStore";
 import {addBasketItemAsync, removeBasketItemAsync } from "../basket/basketSlice";
+import { fetchProductAsync, productSelectors } from "./catalogSlice";
 
 export default function ProductDetails() {
     // const {basket, setBasket, removeItem} = useStoreContext(); // lấy data, properties của Basket
     const {basket, status} = useAppSelector(state => state.basket);
     const dispatch = useAppDispatch();
-    const { id } = useParams<{ id: string}>(); // usePrams thì truyền tham số vào phải là kiểu string, ko truyền kiểu number vào được (vì gốc của nó là kiểu string)
-    const [itemProduct, setProduct] = useState<Product | null>(null); // truyền model Product vào trong useState để quản lý sản phẩm
-    const [loading, setLoading] = useState(true);
+    const {id} = useParams<{ id: string}>(); // usePrams thì truyền tham số vào phải là kiểu string, ko truyền kiểu number vào được (vì gốc của nó là kiểu string)
+    const itemProduct = useAppSelector((state) => productSelectors.selectById(state, id!));
+    const {status: productStatus} = useAppSelector(state => state.catalog);
     const [quantity, setQuantity] = useState(0);
     const item = basket?.items.find(i => i.productId === itemProduct?.id); // so sánh xem productId của Product có bằng productId của Basket hay không
 
     useEffect(() => {
         if (item) setQuantity(item.quantity); // thêm số lượng(quantity) từ Basket vào trong ProductDetails 
-        id && agent.Catalog.details(parseInt(id))
-            .then((Response) => setProduct(Response))
-            .catch((error) => console.log(error.Response))
-            .finally(() => setLoading(false)); // cuối cùng nếu lỗi thì là false
-    }, [id, item]);
+        if (!itemProduct && id) dispatch(fetchProductAsync(parseInt(id))); 
+    }, [id, item, dispatch, itemProduct]);
 
     // hàm thay đổi số lượng trong chi tiết sản phẩm
     const handleInputChange = (event: any) => {
@@ -51,7 +46,7 @@ export default function ProductDetails() {
     }
 
 
-    if (loading) return <LoadingComponent />;
+    if (productStatus.includes('pending')) return <LoadingComponent message="Loading product..."/>;
     if (!itemProduct) return <NotFound />; // nếu id sản phẩm ko có, thì sẽ chuyển qua NotFound
 
     return (
