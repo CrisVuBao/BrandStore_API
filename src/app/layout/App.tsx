@@ -33,7 +33,7 @@ export default function App() { // Function Components
      palette: {
       mode: paletteType, // mode: dùng để điều chỉnh đế độ dark hay là light
       background: {
-        default: paletteType === "light" ? "F6F4EB" : "#121212"
+        default: paletteType === "light" ? "#F6F4EB" : "#121212"
       }
      }
   });
