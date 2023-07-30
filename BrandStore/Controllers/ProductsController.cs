@@ -48,6 +48,15 @@ namespace BrandStore.Controllers
             
         }
 
+        [HttpGet("filter")]
+        public async Task<IActionResult> GetFilter()
+        {
+            var brands = await _context.Products.Select(p => p.Brand).Distinct().ToListAsync();
+            var types = await _context.Products.Select(p => p.Type).Distinct().ToListAsync();
+
+            return Ok(new {brands, types});
+        }
+
         [HttpPost]
         public async Task<ActionResult<Product>> AddProduct(Product product)
         {
