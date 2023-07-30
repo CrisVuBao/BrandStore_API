@@ -1,16 +1,37 @@
 import { createAsyncThunk, createEntityAdapter, createSlice } from "@reduxjs/toolkit";
-import { Product } from "../../app/models/product";
+import { Product, ProductParams } from "../../app/models/product";
 import agent from "../../app/api/agent";
 import { RootState } from "../../app/store/configureStore";
 
+interface CatalogState {
+    productsLoaded: boolean;
+    filtersLoaded: boolean;
+    status: string;
+    brands: string[];
+    types: string[];
+    productParams: ProductParams; // biến truy vấn product
+}
+
 const productsAdapter = createEntityAdapter<Product>();
 
+function getAxiosParams(productParams: ProductParams) {
+    const params = new URLSearchParams();
+    params.append('pageNumber', productParams.pageNumber.toString()); // append(name, value)
+    params.append('pageSize', productParams.pageSize.toString());
+    params.append('orderBy', productParams.orderBy);
+    if (productParams.searchTerm) params.append('searchTerm', productParams.searchTerm);
+    if (productParams.brands) params.append('brands', productParams.brands.toString());
+    if (productParams.types) params.append('pagaNumber', productParams.types.toString());
+    return params;
+}
+
 // fetch danh sách product
-export const fetchProductsAsync = createAsyncThunk<Product[]> (
+export const fetchProductsAsync = createAsyncThunk<Product[], void, {state: RootState }> (
     'catalog/fetchProductsAsync',
     async (_, thunkAPI) => {
+        const params = getAxiosParams(thunkAPI.getState().catalog.productParams);
         try {
-            return await agent.Catalog.list();
+            return await agent.Catalog.list(params);
         } catch (error: any) {
             return thunkAPI.rejectWithValue({error: error.data})
         } 
@@ -41,17 +62,33 @@ export const fetchFilters = createAsyncThunk(
     }
 )
 
+function initParams() {
+    return {
+        pageNumber: 1,
+        pageSize: 6,
+        orderBy: 'name'
+    }
+}
+
 // quản lý trạng thái về việc tải danh sách sản phẩm từ API lên Redux store
 export const catalogSlice = createSlice({
     name: 'catalog',
-    initialState: productsAdapter.getInitialState({
+    initialState: productsAdapter.getInitialState<CatalogState>({
         productsLoaded: false,
         filtersLoaded: false,
         status: 'idle',
         brands: [],
-        types: []
+        types: [],
+        productParams: initParams()
     }),
-    reducers: {}, // không có reducers nào được định nghĩa
+    reducers: {
+        setProductParams: (state, action) => {
+            state.productsLoaded = false;
+        },
+        resetProductParams: (state) => {
+            state.productParams = initParams();
+        }
+    }, // reducers setProductParams được định nghĩa
     extraReducers: (builder => { // dùng extraReducers để xử lý các action liên quan đến async action 'fetchProductsAsync'
         builder.addCase(fetchProductsAsync.pending, (state) => {
             state.status = 'pendingFetchProducts';
@@ -93,3 +130,5 @@ export const catalogSlice = createSlice({
 })
 
 export const productSelectors = productsAdapter.getSelectors((state: RootState) => state.catalog);
+
+export const {setProductParams, resetProductParams} = catalogSlice.actions;

@@ -9,3 +9,12 @@ export interface Product {
     brand: string;
     quantityInStock?: number; // có thể null số lượng
 }
+
+export interface ProductParams { // Interface Truy vấn sản phẩm
+    orderBy: string;
+    searchTerm?: string;
+    types?: string[];
+    brands?: string[];
+    pageNumber: number;
+    pageSize: number;
+}
