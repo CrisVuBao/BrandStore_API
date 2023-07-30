@@ -7,7 +7,7 @@ namespace BrandStore.Extensions
 {
     public static class ProductExtentions
     {
-
+        // truy vấn theo giá tăng dần, giảm dần
         public static IQueryable<Product> Sort(this IQueryable<Product> query, string orderBy)
         {
             if (string.IsNullOrWhiteSpace(orderBy)) return query.OrderBy(p => p.Name); // trường hợp nếu không có thông tin để sắp xếp, thì ta sẽ sắp xếp theo theo "Name" mặc định
@@ -22,6 +22,7 @@ namespace BrandStore.Extensions
             return query;
         }
 
+        // truy vấn theo tìm kiếm khi nhập tên
         public static IQueryable<Product> Search(this IQueryable<Product> query, string searchTerm)
         {
             if (string.IsNullOrEmpty(searchTerm)) return query; // nếu ô input mà trống thì khi excute ra sẽ trả về danh sách product mặc định
@@ -31,6 +32,7 @@ namespace BrandStore.Extensions
             return query.Where(p => p.Name.ToLower().Contains(lowerCaseSearchTerm)); // Contranins(): kiểm tra xem đã được chuẩn hóa hay chưa, rồi return về kết quả
         }
 
+        // truy vấn theo Brands(nhãn hàng), Type(loại gì, giày hay tất)
         public static IQueryable<Product> Filter(this IQueryable<Product> query, string brands, string type) 
         {
             var brandList = new List<string>();
