@@ -1,11 +1,13 @@
 ﻿using BrandStore.Data;
 using BrandStore.Entities;
 using BrandStore.Extensions;
+using BrandStore.RequestHelpers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace BrandStore.Controllers
@@ -22,17 +24,18 @@ namespace BrandStore.Controllers
         }
 
         [HttpGet] // lấy full product
-        public async Task<ActionResult<List<Product>>> GetAllProducts(string orderBy, string searchTerm, string brands, string types) 
+        public async Task<ActionResult<List<Product>>> GetAllProducts(ProductParams productParams) 
         {
             var query = _context.Products
-                .Sort(orderBy) // gọi đến method Sort() của ProductExtentions
-                .Search(searchTerm)
-                .Filter(brands, types)
+                .Sort(productParams.OrderBy) // gọi đến method Sort() của ProductExtentions
+                .Search(productParams.SearchTerm)
+                .Filter(productParams.Brands, productParams.Types)
                 .AsQueryable();
 
+            var products = await PagedList<Product>.ToPagedList(query, productParams.PageNumber, productParams.PageSize);
+            Response.Headers.Add("Pagination", JsonSerializer.Serialize(products.MetaData));
 
-
-            return await query.ToListAsync();
+            return products;
         }
 
         [HttpGet("{id}")]
