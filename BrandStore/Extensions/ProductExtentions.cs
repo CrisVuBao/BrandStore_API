@@ -6,7 +6,6 @@ namespace BrandStore.Extensions
 {
     public static class ProductExtentions
     {
-        private static readonly StoreContext _context;
 
         public static IQueryable<Product> Sort(this IQueryable<Product> query, string orderBy)
         {
@@ -20,6 +19,15 @@ namespace BrandStore.Extensions
             };
 
             return query;
+        }
+
+        public static IQueryable<Product> Search(this IQueryable<Product> query, string searchTerm)
+        {
+            if (string.IsNullOrEmpty(searchTerm)) return query; // nếu ô input mà trống thì khi excute ra sẽ trả về danh sách product mặc định
+
+            var lowerCaseSearchTerm = searchTerm.Trim().ToLower(); // chuẩn hóa tìm kiếm không phân biệt chữ hoa hay chữ thường, Trim():loại bỏ các khoảng trắng, toLower():chuyển thành chữ thường
+
+            return query.Where(p => p.Name.ToLower().Contains(lowerCaseSearchTerm)); // Contranins(): kiểm tra xem đã được chuẩn hóa hay chưa, rồi return về kết quả
         }
     }
 }
