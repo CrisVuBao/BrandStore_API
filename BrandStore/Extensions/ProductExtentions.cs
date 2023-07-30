@@ -1,5 +1,6 @@
 ﻿using BrandStore.Data;
 using BrandStore.Entities;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace BrandStore.Extensions
@@ -28,6 +29,27 @@ namespace BrandStore.Extensions
             var lowerCaseSearchTerm = searchTerm.Trim().ToLower(); // chuẩn hóa tìm kiếm không phân biệt chữ hoa hay chữ thường, Trim():loại bỏ các khoảng trắng, toLower():chuyển thành chữ thường
 
             return query.Where(p => p.Name.ToLower().Contains(lowerCaseSearchTerm)); // Contranins(): kiểm tra xem đã được chuẩn hóa hay chưa, rồi return về kết quả
+        }
+
+        public static IQueryable<Product> Filter(this IQueryable<Product> query, string brands, string type) 
+        {
+            var brandList = new List<string>();
+            var typeList = new List<string>();
+
+            if(!string.IsNullOrEmpty(brands))
+            {
+                brandList.AddRange(brands.ToLower().Split(',').ToList());
+            }
+
+            if(!string.IsNullOrEmpty(type))
+            {
+                typeList.AddRange(type.ToLower().Split(",").ToList());
+            }
+
+            query = query.Where(p => brandList.Count == 0 || brandList.Contains(p.Brand.ToLower()));
+            query = query.Where(p => typeList.Count == 0 || typeList.Contains(p.Type.ToLower()));
+
+            return query;
         }
     }
 }

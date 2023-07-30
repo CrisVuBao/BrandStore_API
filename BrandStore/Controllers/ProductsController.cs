@@ -22,11 +22,12 @@ namespace BrandStore.Controllers
         }
 
         [HttpGet] // lấy full product
-        public async Task<ActionResult<List<Product>>> GetAllProducts(string orderBy, string searchTerm) 
+        public async Task<ActionResult<List<Product>>> GetAllProducts(string orderBy, string searchTerm, string brands, string types) 
         {
             var query = _context.Products
                 .Sort(orderBy) // gọi đến method Sort() của ProductExtentions
                 .Search(searchTerm)
+                .Filter(brands, types)
                 .AsQueryable();
 
 
