@@ -81,9 +81,10 @@ export const catalogSlice = createSlice({
         types: [],
         productParams: initParams()
     }),
-    reducers: {
+    reducers: { // cứ coi là reducers nó là cái chứa những hoạt động muốn thực hiện
         setProductParams: (state, action) => {
             state.productsLoaded = false;
+            state.productParams = {...state.productParams, ...action.payload};
         },
         resetProductParams: (state) => {
             state.productParams = initParams();
