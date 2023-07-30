@@ -9,18 +9,17 @@ namespace BrandStore.Entities
         public string BuyerId { get; set; }
         public List<BasketItem> Items { get; set; } = new(); // = new() là sẽ tạo ra một danh sách các mặt hàng khi ta tạo ra một giỏ hàng mới.
    
-        public void AddItem(Product product, int quantityAdd)
+        public void AddItem(Product product, int quantity)
         {
             if (Items.All(item => item.ProductId != product.Id))
             {
-                // đoạn mã này kiểm tra xem sản phẩm với Id là product.Id có tồn tại trong giỏ hàng Items hay không. Nếu không tồn tại, nó sẽ thêm một mục mới đại diện cho sản phẩm đó vào giỏ hàng. Nếu sản phẩm đã tồn tại trong giỏ hàng, thì không có hành động gì thêm được thực hiện.
-                // nếu ProductId của BasketItem không bằng Id của product, thì sẽ thêm product mới vào giỏ hàng
-                Items.Add(new BasketItem { ProductId = product.Id, Quantity = quantityAdd });
+                
+                Items.Add(new BasketItem { Product = product, Quantity = quantity });
             }
 
             // đoạn code này là nếu đã có product trong basket, thì bấm vào add sẽ cộng dồn số lượng(Quantity) vào giỏ
             var existingItem = Items.FirstOrDefault(item => item.ProductId == product.Id);
-            if (existingItem != null) existingItem.Quantity += quantityAdd; // nếu sản phẩm đã tồn tại trong giỏ hàng(existingItem != null), thì chương trình sẽ cộng thêm số lượng mới (quantity) vào số lượng hiện có của mục sản phẩm (Quantity = Quantity + quantity)
+            if (existingItem != null) existingItem.Quantity += quantity; // nếu sản phẩm đã tồn tại trong giỏ hàng(existingItem != null), thì chương trình sẽ cộng thêm số lượng mới (quantity) vào số lượng hiện có của mục sản phẩm (Quantity = Quantity + quantity)
         }
 
         public void RemoveItem(int productId, int quantity)

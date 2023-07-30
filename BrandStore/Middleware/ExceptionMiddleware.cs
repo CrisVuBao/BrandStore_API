@@ -43,7 +43,7 @@ namespace BrandStore.Middleware
 
                 var json = JsonSerializer.Serialize(reponse, options);
 
-                await context.Response.WriteAsync(json);
+                await context.Response.WriteAsync(json); // nếu lỗi Server 500k, thì sẽ hiện ra lỗi đó kèm theo loạt các thông tin dưới dạng tập tin json
             }
         }
     }

@@ -44,7 +44,7 @@ namespace BrandStore.Controllers
             if (basket == null) basket = CreateBasket(); // nếu giỏ hàng = null thì sẽ tạo ra 1 Guid buyerId, và được lưu trên cookies, và tạo ra 1 giỏ hàng mới theo buyerId đó || giải thích 2: Nếu giỏ hàng (basket) chưa tồn tại (null), phương thức sẽ gọi hàm CreateBasket() để tạo mới một giỏ hàng và gán giỏ hàng này cho biến basket. (giống như khi thêm product vào giỏ hàng rồi, nhưng lại quay ra trang chủ, thì giỏ hàng lại trở về null, và bấm vào Add Product thì lại thêm product vào giỏ hàng và rồi sẽ tạo ra giỏ hàng mới)
             // get product
             var product = await _context.Products.FindAsync(productId); // đoạn này là ném số id đã nhập vào trong productId vào trong class Product để dò tìm id sản phẩm
-            if (product == null) return NotFound();
+            if (product == null) return BadRequest(new ProblemDetails { Title = "Product Not Found"});
             // add item
             basket.AddItem(product, quantity); // chạy method AddItem của class Basket
 
@@ -93,7 +93,7 @@ namespace BrandStore.Controllers
             {
                 Id = basket.Id,
                 BuyerId = basket.BuyerId,
-                ItemsDto = basket.Items.Select(item => new BasketItemDto // item là ánh xạ của Items trong Entities
+                Items = basket.Items.Select(item => new BasketItemDto // item là ánh xạ của Items trong Entities
                 {
                     ProductId = item.ProductId,
                     Name = item.Product.Name,

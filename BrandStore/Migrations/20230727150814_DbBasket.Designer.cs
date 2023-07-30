@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BrandStore.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    [Migration("20230727015254_DbBasket")]
+    [Migration("20230727150814_DbBasket")]
     partial class DbBasket
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -1,7 +1,9 @@
 ﻿using BrandStore.Data;
 using BrandStore.Middleware;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -43,6 +45,7 @@ namespace BrandStore
             });
             services.AddCors(); // Thêm Cors, để cho phép UI lấy dữ liệu từ backend
         }
+
 
         // Configure the HTTP request pipeline
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

@@ -1,5 +1,6 @@
 ﻿using BrandStore.Data;
 using BrandStore.Entities;
+using BrandStore.Extensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -20,12 +21,16 @@ namespace BrandStore.Controllers
             _context = context;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<List<Product>>> GetAllProducts() 
+        [HttpGet] // lấy full product
+        public async Task<ActionResult<List<Product>>> GetAllProducts(string orderBy) 
         {
-            var products =  await _context.Products.ToListAsync();
+            var query = _context.Products
+                .Sort(orderBy) // gọi đến method Sort() của ProductExtentions
+                .AsQueryable();
 
-            return Ok(products);
+
+
+            return await query.ToListAsync();
         }
 
         [HttpGet("{id}")]
