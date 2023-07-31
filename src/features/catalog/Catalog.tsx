@@ -2,9 +2,10 @@ import LoadingComponent from "../../app/layout/LoadingComponent";
 import { useAppDispatch, useAppSelector } from "../../app/store/configureStore";
 import ProductList from "./ProductList";
 import { useEffect } from "react";
-import { fetchFilters, fetchProductsAsync, productSelectors } from "./catalogSlice";
+import { fetchFilters, fetchProductsAsync, productSelectors, setProductParams } from "./catalogSlice";
 import { Box, Checkbox, FormControl, FormControlLabel, FormGroup, Grid, Pagination, Paper, Radio, RadioGroup, Typography } from "@mui/material";
 import ProductSearch from "./ProductSearch";
+import RadioButtonGroup from "../../app/components/RadioButtonGroup";
 
 const sortOptions = [
     { value: 'name', label: 'Alphabetical' },
@@ -14,7 +15,7 @@ const sortOptions = [
 
 export default function Catalog() {
     const products = useAppSelector(productSelectors.selectAll);
-    const { productsLoaded, status, filtersLoaded, brands, types } = useAppSelector(state => state.catalog);
+    const { productsLoaded, status, filtersLoaded, brands, types, productParams } = useAppSelector(state => state.catalog);
     const dispatch = useAppDispatch();
 
     useEffect(() => {
@@ -35,13 +36,11 @@ export default function Catalog() {
                         <ProductSearch />
                     </Paper>
                     <Paper sx={{ mb: 2, p: 2 }}>
-                        <FormControl component="fieldset">
-                            <RadioGroup>
-                                {sortOptions.map(({ value, label }) => (
-                                    <FormControlLabel value={value} control={<Radio />} label={label} key={value} />
-                                ))}
-                            </RadioGroup>
-                        </FormControl>
+                        <RadioButtonGroup
+                            selectedValue={productParams.orderBy}
+                            options={sortOptions}
+                            onChange={(e) => dispatch(setProductParams({ orderBy: e.target.value }))}
+                        />
                     </Paper>
                     <Paper sx={{ mb: 2, p: 2 }}>
                         <FormGroup>
@@ -62,7 +61,7 @@ export default function Catalog() {
                     <ProductList products={products} /> {/* đây cũng giống như hàm khởi tạo được gọi bên hàm Main trong C# */}
                 </Grid>
                 <Grid item xs={3} />
-                <Grid item xs={9}>
+                <Grid item xs={9} sx={{ mb: 2 }}>
                     <Box display='flex' justifyContent='space-between' alignItems='center' >
                         <Typography>
                             1-6 item
