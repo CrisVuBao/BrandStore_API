@@ -13,8 +13,8 @@ export interface Product {
 export interface ProductParams { // Interface Truy vấn sản phẩm
     orderBy: string;
     searchTerm?: string;
-    types?: string[];
-    brands?: string[];
+    types: string[];
+    brands: string[];
     pageNumber: number;
     pageSize: number;
 }
