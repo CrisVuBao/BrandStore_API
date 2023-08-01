@@ -24,7 +24,7 @@ namespace BrandStore.Controllers
         }
 
         [HttpGet] // lấy full product
-        public async Task<ActionResult<List<Product>>> GetAllProducts([FromQuery]ProductParams productParams) 
+        public async Task<ActionResult<PagedList<Product>>> GetAllProducts([FromQuery]ProductParams productParams) // và đây là sẽ trả ra 1 PagedList<T>, và <T> bây giờ sẽ chính là <Product>
         {
             var query = _context.Products
                 .Sort(productParams.OrderBy) // gọi đến method Sort() của ProductExtentions
@@ -48,7 +48,7 @@ namespace BrandStore.Controllers
             
         }
 
-        [HttpGet("filter")]
+        [HttpGet("filters")]
         public async Task<IActionResult> GetFilter()
         {
             var brands = await _context.Products.Select(p => p.Brand).Distinct().ToListAsync();

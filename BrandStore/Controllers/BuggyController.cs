@@ -41,7 +41,7 @@ namespace BrandStore.Controllers
             try
             {
                 return Ok("Request Server OK");
-            } catch (Exception ex)
+            } catch (Exception)
             {
                 throw new Exception("This is a server error"); // Exception() ngoại lệ là server error
             }
