@@ -17,7 +17,10 @@ builder.Services.AddDbContext<StoreContext>(opt =>
     opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 builder.Services.AddCors();
-builder.Services.AddIdentityCore<User>() //  Đây là thêm dịch vụ Identity vào hệ thống
+builder.Services.AddIdentityCore<User>(opt =>
+{
+    opt.User.RequireUniqueEmail = true; // kiểm tra email đã có chưa, có rồi thì hiện thông báo
+}) //  Đây là thêm dịch vụ Identity vào hệ thống
     .AddRoles<IdentityRole>() // phương thức hỗ trợ quản lý role
     .AddEntityFrameworkStores<StoreContext>();
 builder.Services.AddAuthentication(); // cấu hình xác nhận người dùng
